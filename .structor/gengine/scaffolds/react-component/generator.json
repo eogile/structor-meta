@@ -1,0 +1,8 @@
+{
+  "templateNames": [
+    "component", "docs", "defaultModels", "test"
+  ],
+  "mergeScripts": [
+    "componentsFile"
+  ]
+}

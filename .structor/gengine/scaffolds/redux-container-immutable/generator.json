@@ -1,0 +1,20 @@
+{
+  "templateNames": [
+    "component",
+    "constants",
+    "docs",
+    "actions",
+    "selectors",
+    "reducer",
+    "sagas",
+    "defaultModels",
+    "test",
+    "testActions",
+    "testReducer",
+    "testSagas",
+    "testSelectors"
+  ],
+  "mergeScripts": [
+    "componentsFile", "reducerFile", "sagasFile"
+  ]
+}
