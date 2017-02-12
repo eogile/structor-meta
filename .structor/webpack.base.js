@@ -74,7 +74,7 @@ module.exports = (options) => ({
 
 		new webpack.optimize.OccurrenceOrderPlugin(),
 		new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
-		new webpack.NoErrorsPlugin(),
+		new webpack.NoEmitOnErrorsPlugin(),
 		new webpack.ProvidePlugin({
 			// make fetch available
 			fetch: 'exports?self.fetch!whatwg-fetch',
