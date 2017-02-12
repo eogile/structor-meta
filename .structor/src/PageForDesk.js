@@ -92,38 +92,6 @@ function wrapComponent(WrappedComponent, props) {
     return klass;
 }
 
-function wrapPreviewComponent(WrappedComponent) {
-    const myName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-    var klass = React.createClass({
-        initDOMNode(){
-            if(!this.$DOMNode){
-                this.$DOMNode = $(ReactDOM.findDOMNode(this));
-                this.$DOMNode
-                    .on('keydown', this.handleNoop);
-            }
-        },
-        componentDidMount(){
-            this.initDOMNode();
-        },
-        componentWillUnmount(){
-            if(this.$DOMNode){
-                this.$DOMNode
-                    .off('keydown');
-            }
-            this.$DOMNode = undefined;
-        },
-        handleNoop(e){
-            e.stopPropagation();
-            e.preventDefault();
-        },
-        render: function(){
-            return <WrappedComponent {...this.props} />;
-        }
-    });
-    klass.displayName = myName;
-    return klass;
-}
-
 class PageForDesk extends Component {
 
     constructor(props, content) {
@@ -353,45 +321,6 @@ class PageForDesk extends Component {
             });
         }
         return elements;
-    }
-
-    createPreviewElement(node){
-        if(node && node.modelNode){
-            let type = 'div';
-            let modelNode = node.modelNode;
-            if(modelNode.type){
-                type = this.findComponent(components, modelNode.type, 0);
-                if(!type){
-                    type = modelNode.type;
-                } else if(!isObject(type)){
-                    console.error('Element type: ' + modelNode.type + ' is not object. Please check your components.js file');
-                    type = 'div';
-                }
-            }
-            let props = Object.assign({}, {
-                key: node.key,
-                params: this.props.params || {},
-                location: this.props.location || {}
-            }, modelNode.props);
-            if(node.props){
-                forOwn(node.props, (prop, propName) => {
-                    props[propName] = this.createPreviewElement(prop);
-                });
-            }
-            let nestedElements = null;
-            if(node.children && node.children.length > 0){
-                let children = [];
-                node.children.forEach(node => {
-                    children.push(this.createPreviewElement(node));
-                });
-                nestedElements = children;
-            } else if(modelNode.text) {
-                nestedElements = [modelNode.text];
-            }
-            return React.createElement(wrapPreviewComponent(type), props, nestedElements);
-        } else {
-            return null;
-        }
     }
 
     render(){
