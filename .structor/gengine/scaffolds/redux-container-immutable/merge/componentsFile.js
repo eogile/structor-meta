@@ -1,30 +1,41 @@
-import {has, get, camelCase, findIndex} from 'lodash';
-import { parse, generate, traverse } from 'structor-market-gengine-commons';
+'use strict';
 
-function injectImport(ast, identifier, sourcePath){
-    let foundIndex = -1;
-    let injectIndex = -1;
-    for(let i = 0; i < ast.body.length; i++){
-        const {type, specifiers, source} = ast.body[i];
-        if(type === 'ImportDeclaration'){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.injectComponent = injectComponent;
+exports.getFile = getFile;
+
+var _lodash = require('lodash');
+
+var _structorCommons = require('structor-commons');
+
+function injectImport(ast, identifier, sourcePath) {
+    var foundIndex = -1;
+    var injectIndex = -1;
+    for (var i = 0; i < ast.body.length; i++) {
+        var _ast$body$i = ast.body[i],
+            type = _ast$body$i.type,
+            specifiers = _ast$body$i.specifiers,
+            source = _ast$body$i.source;
+
+        if (type === 'ImportDeclaration') {
             injectIndex = i;
-            if(source && source.value === sourcePath){
+            if (source && source.value === sourcePath) {
                 foundIndex = i;
             }
         }
     }
-    if(foundIndex < 0){
+    if (foundIndex < 0) {
         ast.body.splice(injectIndex >= 0 ? injectIndex + 1 : 0, 0, {
             type: 'ImportDeclaration',
-            specifiers: [
-                {
-                    type: "ImportDefaultSpecifier",
-                    local: {
-                        type: "Identifier",
-                        name: identifier
-                    }
+            specifiers: [{
+                type: "ImportDefaultSpecifier",
+                local: {
+                    type: "Identifier",
+                    name: identifier
                 }
-            ],
+            }],
             source: {
                 type: "Literal",
                 value: sourcePath,
@@ -36,10 +47,10 @@ function injectImport(ast, identifier, sourcePath){
     return false;
 }
 
-function findDefaultExportNode(ast){
-    let exports = null;
-    traverse(ast, node => {
-        if(node.type === 'ExportDefaultDeclaration'){
+function findDefaultExportNode(ast) {
+    var exports = null;
+    (0, _structorCommons.traverse)(ast, function (node) {
+        if (node.type === 'ExportDefaultDeclaration') {
             exports = node.declaration;
         }
     });
@@ -47,38 +58,36 @@ function findDefaultExportNode(ast){
 }
 
 function appendToNode(node, variableString) {
-    var newAst = parse('var c = {' + variableString + '}');
+    var newAst = (0, _structorCommons.parse)('var c = {' + variableString + '}');
     var newPart = null;
-    traverse(newAst, node => {
+    (0, _structorCommons.traverse)(newAst, function (node) {
         if (node.type === 'VariableDeclarator' && node.id.name === 'c') {
             newPart = node.init.properties[0];
         }
     });
     if (node.properties) {
-        let index = -1;
+        var index = -1;
         if (node.properties.length > 0) {
-            index = findIndex(node.properties, (o) => {
-                return (o.key && o.key.type === 'Identifier' && o.key.name === newPart.key.name);
+            index = (0, _lodash.findIndex)(node.properties, function (o) {
+                return o.key && o.key.type === 'Identifier' && o.key.name === newPart.key.name;
             });
         }
         if (index >= 0) {
             node.properties[index] = newPart;
         } else {
-            node.properties.push(
-                newPart
-            );
+            node.properties.push(newPart);
         }
     }
 }
 
-export function injectComponent(ast, componentGroup, componentName) {
-    const defaultNodeAst = findDefaultExportNode(ast);
+function injectComponent(ast, componentGroup, componentName) {
+    var defaultNodeAst = findDefaultExportNode(ast);
     if (defaultNodeAst) {
-        const identifier = componentName;
-        const sourcePath = `containers/${componentGroup}/${componentName}`;
+        var identifier = componentName;
+        var sourcePath = 'containers/' + componentGroup + '/' + componentName;
         if (injectImport(ast, identifier, sourcePath)) {
-            let groupNode = null;
-            traverse(defaultNodeAst, node => {
+            var groupNode = null;
+            (0, _structorCommons.traverse)(defaultNodeAst, function (node) {
                 if (node.type === 'Property' && node.key.type === 'Identifier') {
                     if (node.value.type === 'ObjectExpression' && node.key.name === componentGroup) {
                         groupNode = node.value;
@@ -92,23 +101,28 @@ export function injectComponent(ast, componentGroup, componentName) {
             }
         }
     } else {
-        throw Error('Online generator. Could not find default export in "components.js" file.');
+        throw Error('Could not find default export in "components.js" file.');
     }
-    return generate(ast);
+    return (0, _structorCommons.generate)(ast);
 }
 
-export function getFile(dataObject, dependencies){
+function getFile(dataObject, dependencies) {
+    var index = dataObject.index,
+        model = dataObject.model,
+        metadata = dataObject.metadata,
+        project = dataObject.project,
+        groupName = dataObject.groupName,
+        componentName = dataObject.componentName;
 
-    const {index, model, metadata, project, groupName, componentName} = dataObject;
 
-    if(!has(project, 'paths.deskIndexFilePath')){
+    if (!(0, _lodash.has)(project, 'paths.deskIndexFilePath')) {
         throw Error('Wrong project configuration. "deskIndexFilePath" field is missing.');
     }
 
-    let ast = parse(project.sources['deskIndexFile']);
+    var ast = (0, _structorCommons.parse)(project.sources['deskIndexFile']);
 
     return {
         outputFilePath: project.paths.deskIndexFilePath,
         sourceCode: injectComponent(ast, groupName, componentName)
-    }
+    };
 }

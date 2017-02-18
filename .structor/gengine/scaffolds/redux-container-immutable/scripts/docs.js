@@ -1,25 +1,40 @@
-import {template, has} from 'lodash';
-import path from 'path';
+'use strict';
 
-export function getFile(dataObject, templateText){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getFile = getFile;
 
-    const {metadata, project, groupName, componentName} = dataObject;
+var _lodash = require('lodash');
 
-    if(!has(project, 'paths.docsComponentsDirPath')){
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getFile(dataObject, templateText) {
+    var metadata = dataObject.metadata,
+        project = dataObject.project,
+        groupName = dataObject.groupName,
+        componentName = dataObject.componentName;
+
+
+    if (!(0, _lodash.has)(project, 'paths.docsComponentsDirPath')) {
         throw Error('Wrong project configuration. \'docsComponentsDirPath\' field is missing.');
     }
 
-    const absoluteFilePath = path.join(project.paths.docsComponentsDirPath, componentName + '.md');
+    var absoluteFilePath = _path2.default.join(project.paths.docsComponentsDirPath, componentName + '.md');
 
-    const templateObject = {
-        groupName, componentName, metadata
+    var templateObject = {
+        groupName: groupName, componentName: componentName, metadata: metadata
     };
 
-    let resultSource;
-    try{
-        resultSource = template(templateText)(templateObject);
-    } catch(e){
-        throw Error('Online generator. lodash template error. ' + e);
+    var resultSource = void 0;
+    try {
+        resultSource = (0, _lodash.template)(templateText)(templateObject);
+    } catch (e) {
+        throw Error('lodash template error. ' + e);
     }
 
     return {

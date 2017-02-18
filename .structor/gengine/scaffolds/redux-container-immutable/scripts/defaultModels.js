@@ -1,41 +1,48 @@
+'use strict';
 
-import {forOwn, template, has} from 'lodash';
-import path from 'path';
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getFile = getFile;
 
-function repairPath(path){
-    if(path.substr(0, 1) !== '.'){
-        path = './' + path;
-    }
-    return path;
-}
+var _lodash = require('lodash');
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getFile(dataObject, templateText) {
+    var model = dataObject.model,
+        metadata = dataObject.metadata,
+        project = dataObject.project,
+        groupName = dataObject.groupName,
+        componentName = dataObject.componentName;
 
 
-export function getFile(dataObject, templateText){
-
-    const {model, metadata, project, groupName, componentName} = dataObject;
-
-    if(!has(project, 'paths.componentDefaultsDirPath')){
+    if (!(0, _lodash.has)(project, 'paths.componentDefaultsDirPath')) {
         throw Error('Wrong project configuration. \'componentDefaultsDirPath\' field is missing.');
     }
 
-    const absoluteFilePath = path.join(project.paths.componentDefaultsDirPath, componentName + '.json');
+    var absoluteFilePath = _path2.default.join(project.paths.componentDefaultsDirPath, componentName + '.json');
 
-    const templateObject = {
-        groupName, componentName, metadata, model
+    var templateObject = {
+        groupName: groupName, componentName: componentName, metadata: metadata, model: model
     };
 
-    let resultSource;
-    try{
-        resultSource = template(templateText)(templateObject);
-    } catch(e){
-        throw Error('Online generator. lodash template error. ' + e);
+    var resultSource = void 0;
+    try {
+        resultSource = (0, _lodash.template)(templateText)(templateObject);
+    } catch (e) {
+        throw Error('lodash template error. ' + e);
     }
 
-    let defaults = [];
+    var defaults = [];
     try {
         defaults = JSON.parse(resultSource);
     } catch (e) {
-        throw Error('Online generator. Parsing default models JSON error. ' + e);
+        throw Error('Parsing default models JSON error. ' + e);
     }
 
     return {

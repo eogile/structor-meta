@@ -1,33 +1,47 @@
-import {forOwn, template, has} from 'lodash';
-import path from 'path';
+'use strict';
 
-function repairPath(path){
-    if(path.substr(0, 1) !== '.'){
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getFile = getFile;
+
+var _lodash = require('lodash');
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function repairPath(path) {
+    if (path.substr(0, 1) !== '.') {
         path = './' + path;
     }
     return path;
 }
 
+function getFile(dataObject, templateText) {
+    var metadata = dataObject.metadata,
+        project = dataObject.project,
+        groupName = dataObject.groupName,
+        componentName = dataObject.componentName;
 
-export function getFile(dataObject, templateText){
 
-    const {metadata, project, groupName, componentName} = dataObject;
-
-    if(!has(project, 'paths.docsComponentsDirPath')){
+    if (!(0, _lodash.has)(project, 'paths.docsComponentsDirPath')) {
         throw Error('Wrong project configuration. \'docsComponentsDirPath\' field is missing.');
     }
 
-    const absoluteFilePath = path.join(project.paths.docsComponentsDirPath, componentName + '.md');
+    var absoluteFilePath = _path2.default.join(project.paths.docsComponentsDirPath, componentName + '.md');
 
-    const templateObject = {
-        groupName, componentName, metadata
+    var templateObject = {
+        groupName: groupName, componentName: componentName, metadata: metadata
     };
 
-    let resultSource;
-    try{
-        resultSource = template(templateText)(templateObject);
-    } catch(e){
-        throw Error('Online generator. lodash template error. ' + e);
+    var resultSource = void 0;
+    try {
+        resultSource = (0, _lodash.template)(templateText)(templateObject);
+    } catch (e) {
+        throw Error('lodash template error. ' + e);
     }
 
     return {

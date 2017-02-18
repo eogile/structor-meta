@@ -1,6 +1,0 @@
-{
-  "componentType": "ES6 Class",
-  "reducerKeyProperty": "<%= _.camelCase(componentName) %>",
-  "hasChildrenIncluded": true,
-  "isPropertiesExample": true
-}
