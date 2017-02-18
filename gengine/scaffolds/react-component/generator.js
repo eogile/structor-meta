@@ -5,7 +5,7 @@ import metadata from './metadata.js';
 import dependencies from './dependencies.js';
 
 const templateNames = [
-	'components', 'defaultModels', 'docs', 'test'
+	'component', 'defaultModels', 'docs', 'test'
 ];
 
 const mergeScripts = [
