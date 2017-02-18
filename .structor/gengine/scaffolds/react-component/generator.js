@@ -26,7 +26,7 @@ var _dependencies2 = _interopRequireDefault(_dependencies);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var templateNames = ['components', 'defaultModels', 'docs', 'test'];
+var templateNames = ['component', 'defaultModels', 'docs', 'test'];
 
 var mergeScripts = ['componentsFile'];
 
