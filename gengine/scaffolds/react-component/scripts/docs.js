@@ -1,14 +1,6 @@
 import {forOwn, template, has} from 'lodash';
 import path from 'path';
 
-function repairPath(path){
-    if(path.substr(0, 1) !== '.'){
-        path = './' + path;
-    }
-    return path;
-}
-
-
 export function getFile(dataObject, templateText){
 
     const {metadata, project, groupName, componentName} = dataObject;

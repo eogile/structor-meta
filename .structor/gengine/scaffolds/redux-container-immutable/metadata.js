@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
 	metaData: {
 		"componentType": "ES6 Class",
-		"reducerKeyProperty": "",
+		"reducerKeyProperty": "containerComponent",
 		"hasChildrenIncluded": true,
 		"isPropertiesExample": true
 	},

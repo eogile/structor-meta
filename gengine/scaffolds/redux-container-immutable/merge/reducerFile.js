@@ -1,5 +1,5 @@
 import {has, get, camelCase, findIndex} from 'lodash';
-import { parse, generate, traverse } from 'structor-commons';
+import engine from 'structor-commons';
 
 function appendToNode(node, property, identifier) {
     if(node.type === 'ObjectExpression'){
@@ -92,7 +92,7 @@ function removeImport(ast, defaultNode, sourcePath) {
 
 function findDefaultExportNode(ast){
     let exports = null;
-    traverse(ast, node => {
+    engine.traverse(ast, node => {
         if(node.type === 'ExportDefaultDeclaration'){
             exports = node.declaration;
         }
@@ -132,7 +132,7 @@ export function injectReducer(ast, componentGroup, componentName, reducerKeyProp
     const identifier = reducerKeyProperty + 'Reducer';
     const sourcePath = `containers/${componentGroup}/${componentName}/reducer.js`;
     injectImport(ast, property, identifier, sourcePath);
-    return generate(ast);
+    return engine.generate(ast);
 }
 
 export function getFile(dataObject, dependencies){
@@ -143,7 +143,7 @@ export function getFile(dataObject, dependencies){
         throw Error('Wrong project configuration. "deskReducersFilePath" field is missing.');
     }
 
-    let ast = parse(project.sources['deskReducersFile']);
+    let ast = engine.parse(project.sources['deskReducersFile']);
 
     return {
         outputFilePath: project.paths.deskReducersFilePath,

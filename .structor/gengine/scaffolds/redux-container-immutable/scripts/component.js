@@ -13,6 +13,8 @@ var _path2 = _interopRequireDefault(_path);
 
 var _structorCommons = require('structor-commons');
 
+var _structorCommons2 = _interopRequireDefault(_structorCommons);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getFile(dataObject, templateText) {
@@ -28,7 +30,7 @@ function getFile(dataObject, templateText) {
         throw Error('Wrong project configuration. \'appDirPath\' field is missing.');
     }
 
-    var modelComponentMap = (0, _structorCommons.getModelComponentMap)(model);
+    var modelComponentMap = _structorCommons2.default.getModelComponentMap(model);
 
     var imports = [];
     var absoluteComponentDirPath = _path2.default.join(project.paths.appDirPath, 'containers', groupName, componentName);
@@ -66,7 +68,7 @@ function getFile(dataObject, templateText) {
     }
 
     try {
-        resultSource = (0, _structorCommons.formatJs)(resultSource);
+        resultSource = _structorCommons2.default.formatJs(resultSource);
     } catch (e) {
         throw Error('JavaScript syntax error. ' + e + '\n[Source code:]\n' + resultSource);
     }

@@ -27,7 +27,6 @@ const mergeScripts = [
 export function preProcess(currentDir, dataObject) {
 
 	let newMetaData = cloneDeep(metadata);
-	newMetaData.reducerKeyProperty = dataObject.componentName;
 	return newMetaData;
 
 }

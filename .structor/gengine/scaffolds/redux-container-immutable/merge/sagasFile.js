@@ -10,6 +10,10 @@ var _lodash = require('lodash');
 
 var _structorCommons = require('structor-commons');
 
+var _structorCommons2 = _interopRequireDefault(_structorCommons);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function appendToNode(node, identifier) {
     if (node.type === 'ArrayExpression') {
         if (node.elements) {
@@ -95,7 +99,7 @@ function removeImport(ast, defaultNode, sourcePath) {
 
 function findDefaultExportNode(ast) {
     var exports = null;
-    (0, _structorCommons.traverse)(ast, function (node) {
+    _structorCommons2.default.traverse(ast, function (node) {
         if (node.type === 'ExportDefaultDeclaration') {
             exports = node.declaration;
         }
@@ -132,7 +136,7 @@ function injectSaga(ast, componentGroup, componentName, reducerKeyProperty) {
     var identifier = reducerKeyProperty + 'Sagas';
     var sourcePath = 'containers/' + componentGroup + '/' + componentName + '/sagas.js';
     injectImport(ast, identifier, sourcePath);
-    return (0, _structorCommons.generate)(ast);
+    return _structorCommons2.default.generate(ast);
 }
 
 function getFile(dataObject, dependencies) {
@@ -148,7 +152,7 @@ function getFile(dataObject, dependencies) {
         throw Error('Wrong project configuration. "deskSagasFilePath" field is missing.');
     }
 
-    var ast = (0, _structorCommons.parse)(project.sources['deskSagasFile']);
+    var ast = _structorCommons2.default.parse(project.sources['deskSagasFile']);
 
     return {
         outputFilePath: project.paths.deskSagasFilePath,

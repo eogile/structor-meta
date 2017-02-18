@@ -10,6 +10,10 @@ var _lodash = require('lodash');
 
 var _structorCommons = require('structor-commons');
 
+var _structorCommons2 = _interopRequireDefault(_structorCommons);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function appendToNode(node, property, identifier) {
     if (node.type === 'ObjectExpression') {
         if (node.properties) {
@@ -103,7 +107,7 @@ function removeImport(ast, defaultNode, sourcePath) {
 
 function findDefaultExportNode(ast) {
     var exports = null;
-    (0, _structorCommons.traverse)(ast, function (node) {
+    _structorCommons2.default.traverse(ast, function (node) {
         if (node.type === 'ExportDefaultDeclaration') {
             exports = node.declaration;
         }
@@ -141,7 +145,7 @@ function injectReducer(ast, componentGroup, componentName, reducerKeyProperty) {
     var identifier = reducerKeyProperty + 'Reducer';
     var sourcePath = 'containers/' + componentGroup + '/' + componentName + '/reducer.js';
     injectImport(ast, property, identifier, sourcePath);
-    return (0, _structorCommons.generate)(ast);
+    return _structorCommons2.default.generate(ast);
 }
 
 function getFile(dataObject, dependencies) {
@@ -157,7 +161,7 @@ function getFile(dataObject, dependencies) {
         throw Error('Wrong project configuration. "deskReducersFilePath" field is missing.');
     }
 
-    var ast = (0, _structorCommons.parse)(project.sources['deskReducersFile']);
+    var ast = _structorCommons2.default.parse(project.sources['deskReducersFile']);
 
     return {
         outputFilePath: project.paths.deskReducersFilePath,

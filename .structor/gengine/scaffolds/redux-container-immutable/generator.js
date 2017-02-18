@@ -33,7 +33,6 @@ var mergeScripts = ['componentsFile', 'reducerFile', 'sagasFile'];
 function preProcess(currentDir, dataObject) {
 
 	var newMetaData = (0, _lodash.cloneDeep)(_metadata2.default);
-	newMetaData.reducerKeyProperty = dataObject.componentName;
 	return newMetaData;
 }
 

@@ -1,5 +1,5 @@
 import {has, get, camelCase, findIndex} from 'lodash';
-import { parse, generate, traverse } from 'structor-commons';
+import engine from 'structor-commons';
 
 function appendToNode(node, identifier) {
     if(node.type === 'ArrayExpression'){
@@ -84,7 +84,7 @@ function removeImport(ast, defaultNode, sourcePath) {
 
 function findDefaultExportNode(ast){
     let exports = null;
-    traverse(ast, node => {
+    engine.traverse(ast, node => {
         if(node.type === 'ExportDefaultDeclaration'){
             exports = node.declaration;
         }
@@ -123,7 +123,7 @@ export function injectSaga(ast, componentGroup, componentName, reducerKeyPropert
     const identifier = reducerKeyProperty + 'Sagas';
     const sourcePath = `containers/${componentGroup}/${componentName}/sagas.js`;
     injectImport(ast, identifier, sourcePath);
-    return generate(ast);
+    return engine.generate(ast);
 }
 
 export function getFile(dataObject, dependencies){
@@ -134,7 +134,7 @@ export function getFile(dataObject, dependencies){
         throw Error('Wrong project configuration. "deskSagasFilePath" field is missing.');
     }
 
-    let ast = parse(project.sources['deskSagasFile']);
+    let ast = engine.parse(project.sources['deskSagasFile']);
 
     return {
         outputFilePath: project.paths.deskSagasFilePath,

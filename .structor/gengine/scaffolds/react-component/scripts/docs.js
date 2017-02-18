@@ -13,13 +13,6 @@ var _path2 = _interopRequireDefault(_path);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function repairPath(path) {
-    if (path.substr(0, 1) !== '.') {
-        path = './' + path;
-    }
-    return path;
-}
-
 function getFile(dataObject, templateText) {
     var metadata = dataObject.metadata,
         project = dataObject.project,

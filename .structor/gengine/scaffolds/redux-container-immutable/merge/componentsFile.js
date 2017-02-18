@@ -10,6 +10,10 @@ var _lodash = require('lodash');
 
 var _structorCommons = require('structor-commons');
 
+var _structorCommons2 = _interopRequireDefault(_structorCommons);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function injectImport(ast, identifier, sourcePath) {
     var foundIndex = -1;
     var injectIndex = -1;
@@ -49,7 +53,7 @@ function injectImport(ast, identifier, sourcePath) {
 
 function findDefaultExportNode(ast) {
     var exports = null;
-    (0, _structorCommons.traverse)(ast, function (node) {
+    _structorCommons2.default.traverse(ast, function (node) {
         if (node.type === 'ExportDefaultDeclaration') {
             exports = node.declaration;
         }
@@ -58,9 +62,9 @@ function findDefaultExportNode(ast) {
 }
 
 function appendToNode(node, variableString) {
-    var newAst = (0, _structorCommons.parse)('var c = {' + variableString + '}');
+    var newAst = _structorCommons2.default.parse('var c = {' + variableString + '}');
     var newPart = null;
-    (0, _structorCommons.traverse)(newAst, function (node) {
+    _structorCommons2.default.traverse(newAst, function (node) {
         if (node.type === 'VariableDeclarator' && node.id.name === 'c') {
             newPart = node.init.properties[0];
         }
@@ -87,7 +91,7 @@ function injectComponent(ast, componentGroup, componentName) {
         var sourcePath = 'containers/' + componentGroup + '/' + componentName;
         if (injectImport(ast, identifier, sourcePath)) {
             var groupNode = null;
-            (0, _structorCommons.traverse)(defaultNodeAst, function (node) {
+            _structorCommons2.default.traverse(defaultNodeAst, function (node) {
                 if (node.type === 'Property' && node.key.type === 'Identifier') {
                     if (node.value.type === 'ObjectExpression' && node.key.name === componentGroup) {
                         groupNode = node.value;
@@ -103,7 +107,7 @@ function injectComponent(ast, componentGroup, componentName) {
     } else {
         throw Error('Could not find default export in "components.js" file.');
     }
-    return (0, _structorCommons.generate)(ast);
+    return _structorCommons2.default.generate(ast);
 }
 
 function getFile(dataObject, dependencies) {
@@ -119,7 +123,7 @@ function getFile(dataObject, dependencies) {
         throw Error('Wrong project configuration. "deskIndexFilePath" field is missing.');
     }
 
-    var ast = (0, _structorCommons.parse)(project.sources['deskIndexFile']);
+    var ast = _structorCommons2.default.parse(project.sources['deskIndexFile']);
 
     return {
         outputFilePath: project.paths.deskIndexFilePath,

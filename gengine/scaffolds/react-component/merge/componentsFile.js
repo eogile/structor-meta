@@ -1,5 +1,5 @@
 import {has, get, camelCase, findIndex} from 'lodash';
-import { parse, generate, traverse } from 'structor-commons';
+import engine from 'structor-commons';
 
 function injectImport(ast, componentGroup, componentName){
     let foundIndex = -1;
@@ -39,7 +39,7 @@ function injectImport(ast, componentGroup, componentName){
 
 function findDefaultExportNode(ast){
     let exports = null;
-    traverse(ast, node => {
+    engine.traverse(ast, node => {
         if(node.type === 'ExportDefaultDeclaration'){
             exports = node.declaration;
         }
@@ -48,9 +48,9 @@ function findDefaultExportNode(ast){
 }
 
 function appendToNode(node, variableString) {
-    var newAst = parse('var c = {' + variableString + '}');
+    var newAst = engine.parse('var c = {' + variableString + '}');
     var newPart = null;
-    traverse(newAst, node => {
+    engine.traverse(newAst, node => {
         if (node.type === 'VariableDeclarator' && node.id.name === 'c') {
             newPart = node.init.properties[0];
         }
@@ -77,7 +77,7 @@ export function injectComponent(ast, componentGroup, componentName) {
     if (defaultNodeAst) {
         if (injectImport(ast, componentGroup, componentName)) {
             let groupNode = null;
-            traverse(defaultNodeAst, node => {
+            engine.traverse(defaultNodeAst, node => {
                 if (node.type === 'Property' && node.key.type === 'Identifier') {
                     if (node.value.type === 'ObjectExpression' && node.key.name === componentGroup) {
                         groupNode = node.value;
@@ -93,7 +93,7 @@ export function injectComponent(ast, componentGroup, componentName) {
     } else {
         throw Error('Could not find default export in "./structor/app/components.js" file.');
     }
-    return generate(ast);
+    return engine.generate(ast);
 }
 
 export function getFile(dataObject, dependencies){
@@ -104,7 +104,7 @@ export function getFile(dataObject, dependencies){
         throw Error('Wrong project configuration. \'deskIndexFilePath\' field is missing.');
     }
 
-    let ast = parse(project.sources['deskIndexFile']);
+    let ast = engine.parse(project.sources['deskIndexFile']);
 
     return {
         outputFilePath: project.paths.deskIndexFilePath,

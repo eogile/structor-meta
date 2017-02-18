@@ -1,6 +1,6 @@
 import {forOwn, template, has} from 'lodash';
 import path from 'path';
-import { formatJs, getModelComponentMap } from 'structor-commons';
+import engine from 'structor-commons';
 
 export function getFile(dataObject, templateText){
 
@@ -10,7 +10,7 @@ export function getFile(dataObject, templateText){
         throw Error('Wrong project configuration. \'appDirPath\' field is missing.');
     }
 
-    let modelComponentMap = getModelComponentMap(model);
+    let modelComponentMap = engine.getModelComponentMap(model);
 
     let imports = [];
     const absoluteComponentDirPath = path.join(project.paths.appDirPath, 'components', groupName, componentName);
@@ -47,7 +47,7 @@ export function getFile(dataObject, templateText){
     }
 
     try{
-        resultSource = formatJs(resultSource);
+        resultSource = engine.formatJs(resultSource);
         resultSource = resultSource.replace(/(^\s*[\r\n]){2,}/gm, "\n");
     } catch (e){
         throw Error('JavaScript syntax error. ' + e + '\n[Source code:]\n' + resultSource);

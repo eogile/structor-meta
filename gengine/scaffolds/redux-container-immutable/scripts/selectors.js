@@ -1,6 +1,6 @@
 import {template, has} from 'lodash';
 import path from 'path';
-import {formatJs} from 'structor-commons';
+import engine from 'structor-commons';
 
 export function getFile(dataObject, templateText){
 
@@ -23,7 +23,7 @@ export function getFile(dataObject, templateText){
     }
 
     try{
-        resultSource = formatJs(resultSource);
+        resultSource = engine.formatJs(resultSource);
         resultSource = resultSource.replace(/(^\s*[\r\n]){2,}/gm, "\n");
     } catch (e){
         throw Error('JavaScript syntax error. ' + e + '\n[Source code:]\n' + resultSource);
