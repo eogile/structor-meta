@@ -1,6 +1,6 @@
 import {template, has} from 'lodash';
 import path from 'path';
-import {commons} from 'structor-market-gengine-commons';
+import {commons} from 'structor-commons';
 
 export function getFile(dataObject, templateText){
 

@@ -23,7 +23,7 @@ export function getFile(dataObject, templateText){
     }
 
     try{
-        resultSource = formatJs(resultSource);
+        resultSource = commons.formatJs(resultSource);
         resultSource = resultSource.replace(/(^\s*[\r\n]){2,}/gm, "\n");
     } catch (e){
         throw Error('JavaScript syntax error. ' + e + '\n[Source code:]\n' + resultSource);
