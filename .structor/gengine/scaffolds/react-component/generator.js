@@ -14,8 +14,6 @@ var _lodash = require('lodash');
 
 var _structorCommons = require('structor-commons');
 
-var _structorCommons2 = _interopRequireDefault(_structorCommons);
-
 var _metadata = require('./metadata.js');
 
 var _metadata2 = _interopRequireDefault(_metadata);
@@ -42,7 +40,7 @@ function process(currentDir, dataObject) {
 	var templateReaders = [];
 
 	templateNames.forEach(function (name) {
-		templateReaders.push(_structorCommons2.default.readFile(_path2.default.join(currentDir, 'templates', name + '.tpl')).then(function (fileData) {
+		templateReaders.push(_structorCommons.commons.readFile(_path2.default.join(currentDir, 'templates', name + '.tpl')).then(function (fileData) {
 			templateDatas[name] = fileData;
 		}));
 	});

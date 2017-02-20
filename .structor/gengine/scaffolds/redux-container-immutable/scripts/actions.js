@@ -13,8 +13,6 @@ var _path2 = _interopRequireDefault(_path);
 
 var _structorCommons = require('structor-commons');
 
-var _structorCommons2 = _interopRequireDefault(_structorCommons);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getFile(dataObject, templateText) {
@@ -43,7 +41,7 @@ function getFile(dataObject, templateText) {
     }
 
     try {
-        resultSource = _structorCommons2.default.formatJs(resultSource);
+        resultSource = _structorCommons.commons.formatJs(resultSource);
         resultSource = resultSource.replace(/(^\s*[\r\n]){2,}/gm, "\n");
     } catch (e) {
         throw Error('JavaScript syntax error. ' + e + '\n[Source code:]\n' + resultSource);

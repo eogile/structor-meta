@@ -3,7 +3,7 @@ var gulp = require('gulp'),
     babel = require('gulp-babel');
     uglify = require('gulp-uglify');
 
-var srcDirPath = '../gengine/scaffolds';
+var srcDirPath = '../src/gengine/scaffolds';
 var destDirPath = '../.structor/gengine/scaffolds';
 
 gulp.task('clean', function(){
