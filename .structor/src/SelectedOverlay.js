@@ -223,6 +223,10 @@ class SelectedOverlay extends Component {
 			};
 			let buttonLine;
 
+			let appendBeforeButton;
+			let insertFirstButton;
+			let insertLastButton;
+			let appendAfterButton;
 			if (!isMultiple) {
 				buttonLine = {
 					display: 'flex',
@@ -235,14 +239,34 @@ class SelectedOverlay extends Component {
 					buttonLine.right = '-' + (newPos.width - 1) + px;
 					buttonLine.minWidth = newPos.width + px;
 				}
-				if (newPos.height < 50) {
-					if (newPos.top < 50) {
-						buttonLine.bottom = 'calc(-' + (newPos.height - 1) + px + ' - 23px)';
-					} else {
-						buttonLine.top = '-23px';
-					}
+				if (newPos.top < 50) {
+					buttonLine.bottom = 'calc(-' + (newPos.height - 1) + px + ' - 23px)';
 				} else {
-					buttonLine.top = '0px';
+					buttonLine.top = '-23px';
+				}
+				appendBeforeButton = {
+					position: position,
+					top: '-23px',
+					left: ((newPos.width / 2) - 12) + 'px',
+					borderRadius: '50%'
+				};
+				insertFirstButton = {
+					position: position,
+					top: nullPx,
+					left: ((newPos.width / 2) - 12) + 'px',
+					borderRadius: '50%'
+				};
+				insertLastButton = {
+					position: position,
+					bottom: '-' + (newPos.height - 1) + px,
+					left: ((newPos.width / 2) - 12) + 'px',
+					borderRadius: '50%'
+				};
+				appendAfterButton = {
+					position: position,
+					bottom: '-' + (newPos.height + 23) + px,
+					left: ((newPos.width / 2) - 12) + 'px',
+					borderRadius: '50%'
 				}
 			}
 
@@ -265,23 +289,67 @@ class SelectedOverlay extends Component {
 					<div style={leftLine} />
 					<div style={bottomLine} />
 					<div style={rightLine} />
-					{!isMultiple ?
+					{!isMultiple && newPos.width > 50 ?
+						<div
+							className="selected-overlay-button umy-icon-arrow-plus-down"
+							style={appendBeforeButton}
+							title="Append before selected"
+							onClick={this.handleButtonClick(selectedKey, onBefore)}
+							onMouseOver={this.handleMouseEnterLine}
+							onMouseOut={this.handleMouseLeaveLine}
+						/>
+						: null
+					}
+					{!isMultiple && newPos.height > 50 ?
+						<div
+							className="selected-overlay-button umy-icon-arrow-plus-up"
+							style={insertFirstButton}
+							title="Insert into selected as first child"
+							onClick={this.handleButtonClick(selectedKey, onFirst)}
+							onMouseOver={this.handleMouseEnterLine}
+							onMouseOut={this.handleMouseLeaveLine}
+						/>
+						: null
+					}
+					{!isMultiple && newPos.height > 50 ?
+						<div
+							className="selected-overlay-button umy-icon-arrow-plus-down"
+							style={insertLastButton}
+							title="Insert into selected as last child"
+							onClick={this.handleButtonClick(selectedKey, onLast)}
+							onMouseOver={this.handleMouseEnterLine}
+							onMouseOut={this.handleMouseLeaveLine}
+						/>
+						: null
+					}
+					{!isMultiple && newPos.width > 50 ?
+						<div
+							className="selected-overlay-button umy-icon-arrow-plus-up"
+							style={appendAfterButton}
+							title="Append after selected"
+							onClick={this.handleButtonClick(selectedKey, onAfter)}
+							onMouseOver={this.handleMouseEnterLine}
+							onMouseOut={this.handleMouseLeaveLine}
+						/>
+						: null
+					}
+					{!isMultiple && newPos.width > 200 ?
 						<div
 							style={buttonLine}
 							onMouseOver={this.handleMouseEnterLine}
 							onMouseOut={this.handleMouseLeaveLine}
 						>
-							<div className="selected-overlay-button umy-icon-append-before"
-								 title="Append before selected"
-								 onClick={this.handleButtonClick(selectedKey, onBefore)}/>
-							<div className="selected-overlay-button umy-icon-insert-first"
-								 title="Insert into selected as first child"
-								 onClick={this.handleButtonClick(selectedKey, onFirst)}
-								 style={{borderRight: '1px solid #FFFFFF'}}/>
-							<div className="selected-overlay-button umy-icon-edit selected-overlay-button-success"
-								 onClick={this.handleButtonClick(selectedKey, onLoadOptions)}
-								 title="Edit component properties"
-								 style={{borderRight: '1px solid #FFFFFF'}}/>
+							{/*<div className="selected-overlay-button umy-icon-append-before"*/}
+								 {/*title="Append before selected"*/}
+								 {/*onClick={this.handleButtonClick(selectedKey, onBefore)}/>*/}
+							{/*<div className="selected-overlay-button umy-icon-insert-first"*/}
+								 {/*title="Insert into selected as first child"*/}
+								 {/*onClick={this.handleButtonClick(selectedKey, onFirst)}*/}
+								 {/*style={{borderRight: '1px solid #FFFFFF'}}/>*/}
+							{/*<div className="selected-overlay-button umy-icon-edit selected-overlay-button-success"*/}
+								 {/*onClick={this.handleButtonClick(selectedKey, onLoadOptions)}*/}
+								 {/*title="Edit component properties"*/}
+								 {/*style={{borderRight: '1px solid #FFFFFF'}}/>*/}
 							<div className="selected-overlay-button umy-icon-copy"
 								 title="Copy selected into clipboard"
 								 onClick={this.handleButtonClick(selectedKey, onCopy)}/>
@@ -295,13 +363,13 @@ class SelectedOverlay extends Component {
 								 title="Remove component from the page"
 								 onClick={this.handleButtonClick(selectedKey, onDelete)}
 								 style={{borderLeft: '1px solid #FFFFFF'}}/>
-							<div className="selected-overlay-button umy-icon-insert-last"
-								 title="Insert into selected as last child"
-								 onClick={this.handleButtonClick(selectedKey, onLast)}
-								 style={{borderLeft: '1px solid #FFFFFF'}}/>
-							<div className="selected-overlay-button umy-icon-append-after"
-								 title="Append after selected"
-								 onClick={this.handleButtonClick(selectedKey, onAfter)}/>
+							{/*<div className="selected-overlay-button umy-icon-insert-last"*/}
+								 {/*title="Insert into selected as last child"*/}
+								 {/*onClick={this.handleButtonClick(selectedKey, onLast)}*/}
+								 {/*style={{borderLeft: '1px solid #FFFFFF'}}/>*/}
+							{/*<div className="selected-overlay-button umy-icon-append-after"*/}
+								 {/*title="Append after selected"*/}
+								 {/*onClick={this.handleButtonClick(selectedKey, onAfter)}/>*/}
 						</div> : null
 					}
 				</div>

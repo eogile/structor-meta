@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {Router, browserHistory} from 'react-router';
 import PageForDesk from './PageForDesk.js';
-import {getRealPathName} from './constants.js';
+import {getRealPathName} from './commons/constants.js';
 import configureStore from '../app/store.js';
 
 class PageContainer extends React.Component {

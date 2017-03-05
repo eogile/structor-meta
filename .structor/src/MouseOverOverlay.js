@@ -173,14 +173,21 @@ class MouseOverOverlay extends Component {
                     <div style={leftLine}></div>
                     <div style={bottomLine}></div>
                     <div style={rightLine}></div>
-                    {isLabelShown && <span className="mouse-overlay-label" style={labelLine}>{newPos.label}</span>}
+                    {isLabelShown &&
+                    <span
+                        className="mouse-overlay-label"
+                        style={labelLine}
+                    >
+                        {newPos.label}
+                    </span>
+                    }
                 </div>
             );
         } else {
             const style = {
                 display: 'none'
             };
-            content = (<span style={style}></span>);
+            content = (<span style={style} />);
         }
         return content;
     }
