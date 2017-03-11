@@ -20,7 +20,7 @@ function getFile(dataObject, templateText) {
         model = dataObject.model,
         metadata = dataObject.metadata,
         project = dataObject.project,
-        groupName = dataObject.groupName,
+        namespace = dataObject.namespace,
         componentName = dataObject.componentName;
 
 
@@ -28,11 +28,11 @@ function getFile(dataObject, templateText) {
         throw Error('Wrong project configuration. \'appDirPath\' field is missing.');
     }
 
-    var absoluteComponentDirPath = _path2.default.join(project.paths.appDirPath, 'components', groupName, componentName, 'tests');
+    var absoluteComponentDirPath = namespace && namespace.length > 0 ? _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'components', componentName, 'tests') : _path2.default.join(project.paths.appDirPath, 'components', componentName, 'tests');
     var absoluteComponentFilePath = _path2.default.join(absoluteComponentDirPath, 'index.test.js');
 
     var templateObject = {
-        model: model, groupName: groupName, componentName: componentName, metadata: metadata
+        model: model, namespace: namespace, componentName: componentName, metadata: metadata
     };
 
     var resultSource = void 0;

@@ -3,16 +3,19 @@ import path from 'path';
 
 export function getFile(dataObject, templateText){
 
-    const {model, metadata, project, groupName, componentName} = dataObject;
+    const {model, metadata, project, namespace, componentName} = dataObject;
 
     if(!has(project, 'paths.componentDefaultsDirPath')){
         throw Error('Wrong project configuration. \'componentDefaultsDirPath\' field is missing.');
     }
 
-    const absoluteFilePath = path.join(project.paths.componentDefaultsDirPath, componentName + '.json');
+    const absoluteFilePath = namespace && namespace.length > 0 ?
+        path.join(project.paths.componentDefaultsDirPath, namespace, componentName + '.json')
+        :
+        path.join(project.paths.componentDefaultsDirPath, componentName + '.json');
 
     const templateObject = {
-        groupName, componentName, metadata, model
+        namespace, componentName, metadata, model
     };
 
     let resultSource;
@@ -32,6 +35,6 @@ export function getFile(dataObject, templateText){
     return {
         outputFilePath: absoluteFilePath,
         sourceCode: JSON.stringify(defaults),
-        isComponent: false
+        defaults: defaults,
     };
 }

@@ -1,0 +1,15 @@
+[
+  {
+    "namespace": "Router",
+    "type": "IndexLink",
+    "variant": "default",
+    "props": {
+      "to": "/main"
+    },
+    "children": [
+      {
+        "type": "span",
+        "text": "IndexLink to /main"
+      }
+    ]
+  }]

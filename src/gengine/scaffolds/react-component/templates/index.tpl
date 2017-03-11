@@ -16,11 +16,26 @@ function getComponentClassMemberImports(imports) {
     return result;
 }
 
+function getComponentClassNamespaceImports(imports){
+    var result = '';
+    var importsMap = {};
+    imports.forEach( function(item) {
+        if(item.namespace){
+            importsMap[item.relativeSource] = importsMap[item.relativeSource] || [];
+            importsMap[item.relativeSource].push(item.name);
+        }
+    });
+    _.forOwn(importsMap, function(name, relativeSource){
+        result += 'import * as ' + name + ' from \'' + relativeSource + '\';\n';
+    });
+    return result;
+}
+
 function getComponentClassDefaultImports(imports){
     var result = '';
     var importsMap = {};
     imports.forEach( function(item) {
-        if(!item.member){
+        if(!item.member && !item.namespace){
             importsMap[item.relativeSource] = importsMap[item.relativeSource] || [];
             importsMap[item.relativeSource].push(item.name);
         }
@@ -93,8 +108,7 @@ function processProps(props) {
     }
     return result;
 }
-%>
-/**
+%>/**
  *
  * <%= componentName %>
  *
@@ -104,7 +118,7 @@ import React, {PureComponent<% if(metadata.isPropertiesExample || !metadata.hasC
 <% } else if(metadata.componentType === 'ES6 Class') { %>
 import React, {Component<% if(metadata.isPropertiesExample || !metadata.hasChildrenIncluded) {%>, PropTypes<%}%>} from 'react';
 <% } %>
-<% if(metadata.hasChildrenIncluded) { %><%= getComponentClassMemberImports(imports) %><%= getComponentClassDefaultImports(imports) %><% } %>
+<% if(metadata.hasChildrenIncluded) { %><%= getComponentClassMemberImports(imports) %><%= getComponentClassDefaultImports(imports) %><%= getComponentClassNamespaceImports(imports) %><% } %>
 <% if(metadata.componentType === 'ES6 Class (Pure)') { %>
 class <%= componentName %> extends PureComponent { // eslint-disable-line react/prefer-stateless-function
 <% } else if(metadata.componentType === 'ES6 Class') { %>

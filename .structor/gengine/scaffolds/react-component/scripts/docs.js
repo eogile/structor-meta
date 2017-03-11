@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getFile(dataObject, templateText) {
     var metadata = dataObject.metadata,
         project = dataObject.project,
-        groupName = dataObject.groupName,
+        namespace = dataObject.namespace,
         componentName = dataObject.componentName;
 
 
@@ -24,10 +24,10 @@ function getFile(dataObject, templateText) {
         throw Error('Wrong project configuration. \'docsComponentsDirPath\' field is missing.');
     }
 
-    var absoluteFilePath = _path2.default.join(project.paths.docsComponentsDirPath, componentName + '.md');
+    var absoluteFilePath = namespace && namespace.length > 0 ? _path2.default.join(project.paths.docsComponentsDirPath, namespace, componentName + '.md') : _path2.default.join(project.paths.docsComponentsDirPath, componentName + '.md');
 
     var templateObject = {
-        groupName: groupName, componentName: componentName, metadata: metadata
+        namespace: namespace, componentName: componentName, metadata: metadata
     };
 
     var resultSource = void 0;
@@ -39,7 +39,6 @@ function getFile(dataObject, templateText) {
 
     return {
         outputFilePath: absoluteFilePath,
-        sourceCode: resultSource,
-        isComponent: false
+        sourceCode: resultSource
     };
 }

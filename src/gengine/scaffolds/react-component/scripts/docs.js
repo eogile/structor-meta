@@ -3,16 +3,19 @@ import path from 'path';
 
 export function getFile(dataObject, templateText){
 
-    const {metadata, project, groupName, componentName} = dataObject;
+    const {metadata, project, namespace, componentName} = dataObject;
 
     if(!has(project, 'paths.docsComponentsDirPath')){
         throw Error('Wrong project configuration. \'docsComponentsDirPath\' field is missing.');
     }
 
-    const absoluteFilePath = path.join(project.paths.docsComponentsDirPath, componentName + '.md');
+    const absoluteFilePath = namespace && namespace.length > 0 ?
+        path.join(project.paths.docsComponentsDirPath, namespace, componentName + '.md')
+        :
+        path.join(project.paths.docsComponentsDirPath, componentName + '.md');
 
     const templateObject = {
-        groupName, componentName, metadata
+        namespace, componentName, metadata
     };
 
     let resultSource;
@@ -24,7 +27,6 @@ export function getFile(dataObject, templateText){
 
     return {
         outputFilePath: absoluteFilePath,
-        sourceCode: resultSource,
-        isComponent: false
+        sourceCode: resultSource
     };
 }

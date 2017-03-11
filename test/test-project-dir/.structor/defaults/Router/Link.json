@@ -1,0 +1,16 @@
+[
+  {
+    "namespace": "Router",
+    "type": "Link",
+    "variant": "default",
+    "props": {
+      "to": "/main"
+    },
+    "children": [
+      {
+        "type": "span",
+        "text": "Link to /main"
+      }
+    ]
+  }
+]
