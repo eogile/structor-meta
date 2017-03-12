@@ -175,7 +175,6 @@ export function createElement(node, initialState, mouseDownHandler, options){
 export function createElements(model, initialState, mouseDownHandler, options){
 	initialState.elements = {};
 	let elements = [];
-	console.log('Model: ', JSON.stringify(model, null, 4));
 	if(model && model.children && model.children.length > 0){
 		model.children.forEach(child => {
 			elements.push(createElement(child, initialState, mouseDownHandler, options));
