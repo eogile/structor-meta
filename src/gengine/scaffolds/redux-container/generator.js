@@ -1,11 +1,11 @@
 import path from 'path';
-import {cloneDeep, template} from 'lodash';
+import {cloneDeep, template, camelCase} from 'lodash';
 import {commons} from 'structor-commons';
 import metadata from './metadata.js';
 import dependencies from './dependencies.js';
 
 const templateNames = [
-	'component',
+	'index',
 	'constants',
 	'docs',
 	'actions',
@@ -21,12 +21,18 @@ const templateNames = [
 ];
 
 const mergeScripts = [
-	'componentsFile', 'reducerFile', 'sagasFile'
+	'componentsFile',
+	'moduleIndexFile',
+	'reducersFile',
+	'moduleReducerFile',
+	'sagasFile',
+	'moduleSagasFile'
 ];
 
 export function preProcess(currentDir, dataObject) {
-
+	const {componentName} = dataObject;
 	let newMetaData = cloneDeep(metadata);
+	newMetaData.metaData.reducerKeyProperty = camelCase(componentName);
 	return newMetaData;
 
 }
@@ -49,12 +55,16 @@ export function process(currentDir, dataObject) {
 			let newDependencies = cloneDeep(dependencies);
 			let files = [];
 			let file;
+			let defaults = [];
 			templateNames.forEach(name => {
 				const generatorModule = require(path.join(currentDir, 'scripts', name + '.js'));
 				file = generatorModule.getFile(dataObject, templateDatas[name]);
 				if (file.outputFilePath) {
 					file.outputFileName = path.basename(file.outputFilePath);
 					files.push(file);
+				}
+				if (file.defaults && file.defaults.length > 0) {
+					defaults = defaults.concat(file.defaults);
 				}
 			});
 			mergeScripts.forEach(script => {
@@ -65,6 +75,6 @@ export function process(currentDir, dataObject) {
 					files.push(file);
 				}
 			});
-			return {files, dependencies: newDependencies};
+			return {files, dependencies: newDependencies, defaults};
 		});
 }

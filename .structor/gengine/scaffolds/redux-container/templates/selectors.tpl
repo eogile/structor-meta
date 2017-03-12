@@ -1,13 +1,13 @@
 /**
- * <%= componentName %> selectors
+ * <% if (namespace) {%><%= namespace + '/'%><%}%><%= componentName %> selectors
  */
 
 import { createSelector } from 'reselect';
 
 /**
- * Direct selector to the <%= metadata.reducerKeyProperty %> state domain
+ * Direct selector to the <% if (namespace) {%><%= namespace + '.'%><%}%><%= metadata.reducerKeyProperty %> state domain
  */
-const select<%= _.capitalize(metadata.reducerKeyProperty) %> = () => (state) => state.<%= metadata.reducerKeyProperty %>;
+const select<%= _.capitalize(metadata.reducerKeyProperty) %> = () => (state) => state.<% if (namespace) {%><%= namespace + '.'%><%}%><%= metadata.reducerKeyProperty %>;
 
 /**
  * Other specific selectors

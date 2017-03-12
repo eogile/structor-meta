@@ -1,5 +1,5 @@
 /**
- * <%= componentName %>Reducer
+ * <% if (namespace) {%><%= namespace + '/'%><%}%><%= componentName %>Reducer
  *
  * The reducer takes care of our data. Using actions, we can change our
  * application state.
@@ -17,7 +17,7 @@ const initialState = {
     name: 'Sample Name',
 };
 
-function <%= _.camelCase(componentName) %>Reducer(state = initialState, action) {
+function <%= metadata.reducerKeyProperty %>Reducer(state = initialState, action) {
     switch (action.type) {
         case SAMPLE_ACTION:
             return Object.assign({}, state, {name: action.name});
@@ -26,4 +26,4 @@ function <%= _.camelCase(componentName) %>Reducer(state = initialState, action) 
     }
 }
 
-export default <%= _.camelCase(componentName) %>Reducer;
+export default <%= metadata.reducerKeyProperty %>Reducer;

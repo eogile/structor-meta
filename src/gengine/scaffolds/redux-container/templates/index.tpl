@@ -6,13 +6,28 @@ function getComponentClassMemberImports(imports) {
     imports.forEach(function(item) {
         if (item.member) {
             importsMap[item.relativeSource] = importsMap[item.relativeSource] || [];
-            importsMap[item.relativeSource].push(item.member);
+            importsMap[item.relativeSource].push(item.name);
         }
     });
     var joined;
     _.forOwn(importsMap, function(members, relativeSource){
         joined = members.join(',');
         result += 'import {' + joined + '} from \'' + relativeSource  + '\';\n';
+    });
+    return result;
+}
+
+function getComponentClassNamespaceImports(imports){
+    var result = '';
+    var importsMap = {};
+    imports.forEach( function(item) {
+        if(item.namespace){
+            importsMap[item.relativeSource] = importsMap[item.relativeSource] || [];
+            importsMap[item.relativeSource].push(item.name);
+        }
+    });
+    _.forOwn(importsMap, function(name, relativeSource){
+        result += 'import * as ' + name + ' from \'' + relativeSource + '\';\n';
     });
     return result;
 }
@@ -109,7 +124,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectName } from './selectors';
 import { sampleAction } from './actions';
-<% if(metadata.hasChildrenIncluded) { %><%= getComponentClassMemberImports(imports) %><%= getComponentClassDefaultImports(imports) %><% } %>
+<% if(metadata.hasChildrenIncluded) { %><%= getComponentClassMemberImports(imports) %><%= getComponentClassDefaultImports(imports) %><%= getComponentClassNamespaceImports(imports) %><% } %>
 <% if(metadata.componentType === 'ES6 Class (Pure)') { %>
 class <%= componentName %> extends PureComponent { // eslint-disable-line react/prefer-stateless-function
 <% } else if(metadata.componentType === 'ES6 Class') { %>

@@ -4,19 +4,22 @@ import {commons} from 'structor-commons';
 
 export function getFile(dataObject, templateText){
 
-    const {model, metadata, project, groupName, componentName} = dataObject;
+    const {model, metadata, project, namespace, componentName} = dataObject;
 
     if(!has(project, 'paths.appDirPath')){
         throw Error('Wrong project configuration. "appDirPath" field is missing.');
     }
 
-    const absoluteComponentDirPath = path.join(project.paths.appDirPath, 'containers', groupName, componentName, 'tests');
+    const absoluteComponentDirPath = namespace && namespace.length > 0 ?
+        path.join(project.paths.appDirPath, 'modules', namespace, 'containers', componentName, 'tests')
+        :
+        path.join(project.paths.appDirPath, 'containers', componentName, 'tests');
     const absoluteComponentFilePath = path.join(absoluteComponentDirPath, 'selectors.test.js');
 
     let resultSource;
     try{
         resultSource = template(templateText)({
-            model, groupName, componentName, metadata
+            model, namespace, componentName, metadata
         });
     } catch(e){
         throw Error('lodash template error. ' + e);

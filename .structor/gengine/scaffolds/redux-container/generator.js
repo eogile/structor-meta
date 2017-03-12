@@ -24,13 +24,15 @@ var _dependencies2 = _interopRequireDefault(_dependencies);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var templateNames = ['component', 'constants', 'docs', 'actions', 'selectors', 'reducer', 'sagas', 'defaultModels', 'test', 'testActions', 'testReducer', 'testSagas', 'testSelectors'];
+var templateNames = ['index', 'constants', 'docs', 'actions', 'selectors', 'reducer', 'sagas', 'defaultModels', 'test', 'testActions', 'testReducer', 'testSagas', 'testSelectors'];
 
-var mergeScripts = ['componentsFile', 'reducerFile', 'sagasFile'];
+var mergeScripts = ['componentsFile', 'moduleIndexFile', 'reducersFile', 'moduleReducerFile', 'sagasFile', 'moduleSagasFile'];
 
 function preProcess(currentDir, dataObject) {
+	var componentName = dataObject.componentName;
 
 	var newMetaData = (0, _lodash.cloneDeep)(_metadata2.default);
+	newMetaData.metaData.reducerKeyProperty = (0, _lodash.camelCase)(componentName);
 	return newMetaData;
 }
 
@@ -48,12 +50,16 @@ function process(currentDir, dataObject) {
 		var newDependencies = (0, _lodash.cloneDeep)(_dependencies2.default);
 		var files = [];
 		var file = void 0;
+		var defaults = [];
 		templateNames.forEach(function (name) {
 			var generatorModule = require(_path2.default.join(currentDir, 'scripts', name + '.js'));
 			file = generatorModule.getFile(dataObject, templateDatas[name]);
 			if (file.outputFilePath) {
 				file.outputFileName = _path2.default.basename(file.outputFilePath);
 				files.push(file);
+			}
+			if (file.defaults && file.defaults.length > 0) {
+				defaults = defaults.concat(file.defaults);
 			}
 		});
 		mergeScripts.forEach(function (script) {
@@ -64,6 +70,6 @@ function process(currentDir, dataObject) {
 				files.push(file);
 			}
 		});
-		return { files: files, dependencies: newDependencies };
+		return { files: files, dependencies: newDependencies, defaults: defaults };
 	});
 }

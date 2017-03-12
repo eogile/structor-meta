@@ -1,6 +1,6 @@
 import path from 'path';
-import {has, get, camelCase, findIndex} from 'lodash';
-import {commons} from 'structor-commons';
+import {has} from 'lodash';
+import {gengine} from 'structor-commons';
 
 const indexTemplate = (componentName, relativeFilePath) => {
     const result =
@@ -25,18 +25,15 @@ export function getFile(dataObject, dependencies){
     if (namespace && namespace.length > 0) {
         let sourceCode;
         const module = index.modules[namespace];
-        const relativeFilePath = './' + path.join('components', componentName);
+        const relativeFilePath = './' + path.join('containers', componentName);
         let outputFilePath;
-        if (module) {
-            if (module.indexFilePath && module.indexSourceCode) {
-                let ast = commons.parse(module.indexSourceCode);
-                ast = commons.addDefaultImport(ast, componentName, relativeFilePath);
-                ast = commons.addNamedExport(ast, componentName);
-                sourceCode = commons.generate(ast);
-                outputFilePath = module.indexFilePath;
-            } else {
-                throw Error('Module components index file was not found.');
-            }
+        if (module && module.indexFilePath && module.indexSourceCode) {
+            sourceCode = gengine.injectModuleComponent(
+                module.indexSourceCode,
+                componentName,
+                relativeFilePath
+            );
+            outputFilePath = module.indexFilePath;
         } else {
             sourceCode = indexTemplate(componentName, relativeFilePath);
             outputFilePath = path.join(project.paths.appDirPath, 'modules', namespace, 'index.js');

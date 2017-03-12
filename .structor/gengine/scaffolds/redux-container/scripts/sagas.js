@@ -20,7 +20,7 @@ function getFile(dataObject, templateText) {
         model = dataObject.model,
         metadata = dataObject.metadata,
         project = dataObject.project,
-        groupName = dataObject.groupName,
+        namespace = dataObject.namespace,
         componentName = dataObject.componentName;
 
 
@@ -28,13 +28,13 @@ function getFile(dataObject, templateText) {
         throw Error('Wrong project configuration. "appDirPath" field is missing.');
     }
 
-    var absoluteComponentDirPath = _path2.default.join(project.paths.appDirPath, 'containers', groupName, componentName);
+    var absoluteComponentDirPath = namespace && namespace.length > 0 ? _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'containers', componentName) : _path2.default.join(project.paths.appDirPath, 'containers', componentName);
     var absoluteComponentFilePath = _path2.default.join(absoluteComponentDirPath, 'sagas.js');
 
     var resultSource = void 0;
     try {
         resultSource = (0, _lodash.template)(templateText)({
-            model: model, groupName: groupName, componentName: componentName, metadata: metadata
+            model: model, namespace: namespace, componentName: componentName, metadata: metadata
         });
     } catch (e) {
         throw Error('Online generator. lodash template error. ' + e);

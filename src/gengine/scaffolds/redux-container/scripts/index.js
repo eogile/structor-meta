@@ -1,26 +1,31 @@
-import {template, has} from 'lodash';
+import {forOwn, template, has} from 'lodash';
 import path from 'path';
-import {commons} from 'structor-commons';
+import {commons, gengine} from 'structor-commons';
 
 export function getFile(dataObject, templateText){
 
-    const {index, model, metadata, project, namespace, componentName} = dataObject;
+    const {index, model: srcModel, metadata, project, namespace, componentName} = dataObject;
 
     if(!has(project, 'paths.appDirPath')){
-        throw Error('Wrong project configuration. "appDirPath" field is missing.');
+        throw Error('Wrong project configuration. \'appDirPath\' field is missing.');
     }
+
+    const {imports, model} = gengine.prepareModelWithImports(index, srcModel, namespace);
 
     const absoluteComponentDirPath = namespace && namespace.length > 0 ?
         path.join(project.paths.appDirPath, 'modules', namespace, 'containers', componentName)
         :
         path.join(project.paths.appDirPath, 'containers', componentName);
-    const absoluteComponentFilePath = path.join(absoluteComponentDirPath, 'actions.js');
+
+    const absoluteComponentFilePath = path.join(absoluteComponentDirPath, 'index.js');
+
+    const templateObject = {
+        model, imports, namespace, componentName, metadata
+    };
 
     let resultSource;
     try{
-        resultSource = template(templateText)({
-            model, namespace, componentName, metadata
-        });
+        resultSource = template(templateText)(templateObject);
     } catch(e){
         throw Error('lodash template error. ' + e);
     }

@@ -19,7 +19,7 @@ function getFile(dataObject, templateText) {
     var model = dataObject.model,
         metadata = dataObject.metadata,
         project = dataObject.project,
-        groupName = dataObject.groupName,
+        namespace = dataObject.namespace,
         componentName = dataObject.componentName;
 
 
@@ -27,13 +27,13 @@ function getFile(dataObject, templateText) {
         throw Error('Wrong project configuration. "appDirPath" field is missing.');
     }
 
-    var absoluteComponentDirPath = _path2.default.join(project.paths.appDirPath, 'containers', groupName, componentName, 'tests');
+    var absoluteComponentDirPath = namespace && namespace.length > 0 ? _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'containers', componentName, 'tests') : _path2.default.join(project.paths.appDirPath, 'containers', componentName, 'tests');
     var absoluteComponentFilePath = _path2.default.join(absoluteComponentDirPath, 'selectors.test.js');
 
     var resultSource = void 0;
     try {
         resultSource = (0, _lodash.template)(templateText)({
-            model: model, groupName: groupName, componentName: componentName, metadata: metadata
+            model: model, namespace: namespace, componentName: componentName, metadata: metadata
         });
     } catch (e) {
         throw Error('lodash template error. ' + e);
