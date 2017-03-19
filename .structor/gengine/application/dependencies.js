@@ -5,12 +5,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 	packages: [{
+		name: "react-router"
+	}, {
 		name: "redux"
 	}, {
 		name: "redux-saga"
 	}, {
-		name: "reselect"
-	}, {
-		name: "expect"
+		name: "react-router-scroll"
 	}]
 };

@@ -3,8 +3,8 @@ var gulp = require('gulp'),
     babel = require('gulp-babel');
     uglify = require('gulp-uglify');
 
-var srcDirPath = '../src/gengine/scaffolds';
-var destDirPath = '../.structor/gengine/scaffolds';
+var srcDirPath = '../src/gengine';
+var destDirPath = '../.structor/gengine';
 
 gulp.task('clean', function(){
     return del([destDirPath], {force: true});
@@ -13,7 +13,6 @@ gulp.task('clean', function(){
 gulp.task('compile', ['clean'], function() {
     return gulp.src(srcDirPath + '/**/*.js')
         .pipe(babel())
-        // .pipe(uglify())
         .pipe(gulp.dest(destDirPath));
 });
 
