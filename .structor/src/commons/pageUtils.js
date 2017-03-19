@@ -1,7 +1,7 @@
 import { forOwn, isObject, isString, extend, difference, keys, isEqual } from 'lodash';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import components from '../../app/components.js';
+import * as components from '../../app/components.js';
 
 function wrapComponent(WrappedComponent, props) {
 	const { onMouseDown, initialState, key, type } = props;

@@ -4,7 +4,5 @@
  */
 
 module.exports = {
-  projectId: 179,
-  assetsRegexpPath: /<%= srcPath %>[\\\/]assets/,
   srcPath: '<%= srcPath %>',
 };

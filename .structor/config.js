@@ -4,6 +4,5 @@
  */
 
 module.exports = {
-  assetsRegexpPath: /app[\\\/]assets/,
   srcPath: 'app',
 };

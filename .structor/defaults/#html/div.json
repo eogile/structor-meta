@@ -1,0 +1,13 @@
+[
+  {
+    "type": "div",
+    "variant": "default",
+    "props": {},
+    "children": [
+      {
+        "type": "span",
+        "text": "Empty div"
+      }
+    ]
+  }
+]

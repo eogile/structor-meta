@@ -3,9 +3,7 @@ import {
     IndexLink
 } from 'react-router';
 
-export default {
-    Router: {
-        Link,
-        IndexLink
-    }
+export {
+    Link,
+    IndexLink,
 };

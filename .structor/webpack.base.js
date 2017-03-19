@@ -47,7 +47,7 @@ module.exports = (options) => ({
 			// they will be a part of our compilation either way.
 			// So, no need for ExtractTextPlugin here.
 			test: /\.css$/,
-			include: [/node_modules/, options.assetsRegexpPath], // eslint-disable-line
+			include: [/node_modules/], // eslint-disable-line
 			loaders: ['style-loader', 'css-loader'],
 		}, {
 			test: /\.(eot|svg|ttf|woff|woff2)$/,
