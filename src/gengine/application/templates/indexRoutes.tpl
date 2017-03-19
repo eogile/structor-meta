@@ -1,6 +1,6 @@
 <% pagesModel.forEach(function(page, index ){ %>import <%= page.pageName %> from './<%= page.pageName %>.js';<%= '\n' %><% }); %>
 
-export default rootRoute = {
+export default {
 	component: <%= pagesModel[0].pageName %>,
 	childRoutes: [<% pagesModel.forEach(function( page, index ){ %>
 		{
