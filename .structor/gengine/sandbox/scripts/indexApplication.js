@@ -20,11 +20,11 @@ function getFile(dataObject, templateText) {
 	    project = dataObject.project;
 
 
-	if (!(0, _lodash.has)(project, 'paths.dir')) {
+	if (!(0, _lodash.has)(project, 'paths.sandboxDirPath')) {
 		throw Error('Wrong project configuration. \'dir\' field is missing.');
 	}
 
-	var absoluteFilePathPath = _path2.default.join(project.paths.dir, '__sandbox', 'index.js');
+	var absoluteFilePathPath = _path2.default.join(project.paths.sandboxDirPath, 'index.js');
 	var templateObject = {
 		componentName: 'App'
 	};

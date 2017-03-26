@@ -18,30 +18,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getFile(dataObject, templateText) {
     var index = dataObject.index,
         project = dataObject.project,
-        namespace = dataObject.namespace;
+        namespaces = dataObject.namespaces;
 
 
-    if (!(0, _lodash.has)(project, 'paths.dir')) {
-        throw Error('Wrong project configuration. \'dir\' field is missing.');
+    if (!(0, _lodash.has)(project, 'paths.sandboxDirPath')) {
+        throw Error('Wrong project configuration. \'sandboxDirPath\' field is missing.');
     }
 
-    var srcModel = _structorCommons.gengine.combineAllModuleComponents(index, namespace);
-    var modelComponentList = _structorCommons.gengine.getModelComponentList(index, srcModel);
-    if (modelComponentList && modelComponentList.length > 0) {
-        var filtered = modelComponentList.filter(function (item) {
-            return !item.namespace || item.namespace !== namespace;
-        });
-        console.log(JSON.stringify(filtered, null, 4));
-        if (filtered && filtered.length > 0) {
-            throw Error('Namespace models are including components from different namespaces.');
-        }
-    }
+    var srcModel = _structorCommons.gengine.combineAllModulesComponents(index, namespaces);
 
-    var _gengine$prepareModel = _structorCommons.gengine.prepareModelWithImports(index, srcModel, namespace),
+    var _gengine$prepareModel = _structorCommons.gengine.prepareModelWithImports(index, srcModel),
         imports = _gengine$prepareModel.imports,
         model = _gengine$prepareModel.model;
 
-    var absoluteComponentFilePath = _path2.default.join(project.paths.dir, '__sandbox', 'App.js');
+    var absoluteComponentFilePath = _path2.default.join(project.paths.sandboxDirPath, 'App.js');
 
     var templateObject = {
         model: model, imports: imports, componentName: 'App'

@@ -4,15 +4,41 @@ import {commons} from 'structor-commons';
 
 export function getFile(dataObject, templateText) {
 
-	const {index, project, namespace} = dataObject;
+	const {index, project, namespaces} = dataObject;
 
-	if (!has(project, 'paths.dir')) {
+	if (!has(project, 'paths.sandboxDirPath')) {
 		throw Error('Wrong project configuration. \'dir\' field is missing.');
 	}
 
-	const absoluteFilePathPath = path.join(project.paths.dir, '__sandbox', 'store.js');
+	const absoluteFilePathPath = path.join(project.paths.sandboxDirPath, 'store.js');
+	let namespaceReducers = [];
+	let namespaceSagas = [];
+	if (namespaces && namespaces.length > 0) {
+		let moduleDef;
+		namespaces.forEach(namespace => {
+			moduleDef = index.modules[namespace];
+			if (moduleDef) {
+				if (moduleDef.reducerImportPath) {
+					namespaceReducers.push(
+						{
+							name: namespace,
+							importPath: moduleDef.reducerImportPath
+						}
+					);
+				}
+				if (moduleDef.sagasImportPath) {
+					namespaceSagas.push(
+						{
+							name: namespace,
+							importPath: moduleDef.sagasImportPath
+						}
+					);
+				}
+			}
+		});
+	}
 	const templateObject = {
-		namespace
+		namespaceReducers, namespaceSagas
 	};
 	let resultSource;
 	try {

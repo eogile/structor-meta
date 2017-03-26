@@ -18,16 +18,38 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getFile(dataObject, templateText) {
 	var index = dataObject.index,
 	    project = dataObject.project,
-	    namespace = dataObject.namespace;
+	    namespaces = dataObject.namespaces;
 
 
-	if (!(0, _lodash.has)(project, 'paths.dir')) {
+	if (!(0, _lodash.has)(project, 'paths.sandboxDirPath')) {
 		throw Error('Wrong project configuration. \'dir\' field is missing.');
 	}
 
-	var absoluteFilePathPath = _path2.default.join(project.paths.dir, '__sandbox', 'store.js');
+	var absoluteFilePathPath = _path2.default.join(project.paths.sandboxDirPath, 'store.js');
+	var namespaceReducers = [];
+	var namespaceSagas = [];
+	if (namespaces && namespaces.length > 0) {
+		var moduleDef = void 0;
+		namespaces.forEach(function (namespace) {
+			moduleDef = index.modules[namespace];
+			if (moduleDef) {
+				if (moduleDef.reducerImportPath) {
+					namespaceReducers.push({
+						name: namespace,
+						importPath: moduleDef.reducerImportPath
+					});
+				}
+				if (moduleDef.sagasImportPath) {
+					namespaceSagas.push({
+						name: namespace,
+						importPath: moduleDef.sagasImportPath
+					});
+				}
+			}
+		});
+	}
 	var templateObject = {
-		namespace: namespace
+		namespaceReducers: namespaceReducers, namespaceSagas: namespaceSagas
 	};
 	var resultSource = void 0;
 	try {

@@ -6,11 +6,11 @@ export function getFile(dataObject, templateText) {
 
 	const {index, project} = dataObject;
 
-	if (!has(project, 'paths.dir')) {
+	if (!has(project, 'paths.sandboxDirPath')) {
 		throw Error('Wrong project configuration. \'dir\' field is missing.');
 	}
 
-	const absoluteFilePathPath = path.join(project.paths.dir, '__sandbox', 'index.js');
+	const absoluteFilePathPath = path.join(project.paths.sandboxDirPath, 'index.js');
 	const templateObject = {
 		componentName: 'App'
 	};
