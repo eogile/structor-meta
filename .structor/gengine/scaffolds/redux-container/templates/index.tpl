@@ -36,7 +36,7 @@ function getComponentClassDefaultImports(imports){
     var result = '';
     var importsMap = {};
     imports.forEach( function(item) {
-        if(!item.member){
+        if(!item.member && !item.namespace){
             importsMap[item.relativeSource] = importsMap[item.relativeSource] || [];
             importsMap[item.relativeSource].push(item.name);
         }
