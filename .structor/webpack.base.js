@@ -92,7 +92,7 @@ module.exports = (options) => ({
 	],
 
 	resolve: {
-		modules: [options.srcPath, 'node_modules'],
+		modules: [path.resolve(__dirname, '../' + options.srcPath), 'node_modules'],
 		extensions: [
 			'.js',
 			'.jsx',
