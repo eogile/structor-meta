@@ -1,4 +1,4 @@
-<% pagesModel.forEach(function(page, index ){ %>import <%= page.pageName %> from './<%= page.pageName %>.js';<%= '\n' %><% }); %>
+<% pagesModel.forEach(function(page, index ){ %>import <%= page.pageName %> from './<%= page.pageName %>';<%= '\n' %><% }); %>
 
 export default {
 	component: <%= pagesModel[0].pageName %>,
@@ -6,12 +6,12 @@ export default {
 		{
 			path: '<%= page.pagePath %>',
 			name: '<%= page.pagePath %>',
-			component: <%= page.pageName %>
+			component: <%= page.pageName %>,
 		},<% });  %>
 		{
 			path: '*',
 			name: 'notfound',
-			component: <%= pagesModel[0].pageName %>
+			component: <%= pagesModel[0].pageName %>,
 		},
 	],
 };

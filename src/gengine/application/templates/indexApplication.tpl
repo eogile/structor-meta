@@ -14,13 +14,25 @@ import configureStore from './store';
 const initialState = {};
 const store = configureStore(initialState);
 
-ReactDOM.render(
-	<Provider store={store}>
-		<Router
-			history={browserHistory}
-			routes={rootRoute}
-			render={applyRouterMiddleware(useScroll())}
-		/>
-	</Provider>,
-	document.getElementById('root')
-);
+const render = () => {
+	ReactDOM.render(
+		<Provider store={store}>
+			<Router
+				history={browserHistory}
+				routes={rootRoute}
+				render={applyRouterMiddleware(useScroll())}
+			/>
+		</Provider>,
+		document.getElementById('root')
+	);
+};
+
+render();
+
+if (module.hot) {
+	// modules.hot.accept does not accept dynamic dependencies,
+	// have to be constants at compile-time
+	module.hot.accept(['./routes'], () => {
+		render();
+	});
+}

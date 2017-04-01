@@ -1,7 +1,7 @@
 export default {
 	metaData: {
 		"componentType": "ES6 Class",
-		"hasConstructor": true
+		"hasConstructor": false
 	},
 	metaHelp: {
 		"componentType": {
