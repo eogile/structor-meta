@@ -17,6 +17,6 @@
     "gulp-babel": "6.1.2",
     "gulp-uglify": "2.0.1",
     "lodash": "^4.9.0",
-    "structor-commons": "file:/Users/ipselon/Development/projects/structor/github/structor-commons"
+    "structor-commons": "0.0.1"
   }
 }
