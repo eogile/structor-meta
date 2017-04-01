@@ -124,11 +124,6 @@ class <%= componentName %> extends PureComponent { // eslint-disable-line react/
 <% } else if(metadata.componentType === 'ES6 Class') { %>
 class <%= componentName %> extends Component { // eslint-disable-line react/prefer-stateless-function
 <% } %>
-    <% if(metadata.hasConstructor) { %>
-    constructor(props) {
-        super(props);
-    }
-    <%}%>
     render(){
         return (
             <<%= 'div' + (_.isEmpty(model.props) ? '' : ' ' + processProps(model.props)) %>>
