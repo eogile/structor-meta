@@ -1,3 +1,6 @@
+// Needed for redux-saga es6 generator support
+import 'babel-polyfill';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -15,16 +18,16 @@ const initialState = {};
 const store = configureStore(initialState);
 
 const render = () => {
-	ReactDOM.render(
-		<Provider store={store}>
-			<Router
-				history={browserHistory}
-				routes={rootRoute}
-				render={applyRouterMiddleware(useScroll())}
-			/>
-		</Provider>,
-		document.getElementById('root')
-	);
+  ReactDOM.render(
+    <Provider store={store}>
+	  <Router
+        history={browserHistory}
+        routes={rootRoute}
+        render={applyRouterMiddleware(useScroll())}
+      />
+    </Provider>,
+    document.getElementById('root')
+  );
 };
 
 render();
