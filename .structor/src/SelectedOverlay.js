@@ -225,7 +225,9 @@ class SelectedOverlay extends Component {
 
 			let appendBeforeButton;
 			let insertFirstButton;
+			let insertFirstSideButton;
 			let insertLastButton;
+			let insertLastSideButton;
 			let appendAfterButton;
 			if (!isMultiple) {
 				buttonLine = {
@@ -256,10 +258,22 @@ class SelectedOverlay extends Component {
 					left: ((newPos.width / 2) - 12) + 'px',
 					borderRadius: '50%'
 				};
+				insertFirstSideButton = {
+					position: position,
+					top: ((newPos.height / 2) - 12) + 'px',
+					left: '-23px',
+					borderRadius: '50%'
+				};
 				insertLastButton = {
 					position: position,
 					bottom: '-' + (newPos.height - 1) + px,
 					left: ((newPos.width / 2) - 12) + 'px',
+					borderRadius: '50%'
+				};
+				insertLastSideButton = {
+					position: position,
+          top: ((newPos.height / 2) - 12) + 'px',
+					right: (-newPos.width - 22) + 'px',
 					borderRadius: '50%'
 				};
 				appendAfterButton = {
@@ -289,7 +303,7 @@ class SelectedOverlay extends Component {
 					<div style={leftLine} />
 					<div style={bottomLine} />
 					<div style={rightLine} />
-					{!isMultiple && newPos.width > 50 ?
+					{!isMultiple && newPos.width > 20 ?
 						<div
 							className="selected-overlay-button umy-icon-arrow-plus-down"
 							style={appendBeforeButton}
@@ -311,6 +325,18 @@ class SelectedOverlay extends Component {
 						/>
 						: null
 					}
+          {!isMultiple && newPos.height <= 50 ?
+						<div
+							className="selected-overlay-button umy-icon-arrow-plus-up rotate-clockwise"
+							style={insertFirstSideButton}
+							title="Insert into selected as first child"
+							onClick={this.handleButtonClick(selectedKey, onFirst)}
+							onMouseOver={this.handleMouseEnterLine}
+							onMouseOut={this.handleMouseLeaveLine}
+						/>
+						:
+						null
+          }
 					{!isMultiple && newPos.height > 50 ?
 						<div
 							className="selected-overlay-button umy-icon-arrow-plus-down"
@@ -322,7 +348,18 @@ class SelectedOverlay extends Component {
 						/>
 						: null
 					}
-					{!isMultiple && newPos.width > 50 ?
+					{!isMultiple && newPos.height <= 50 ?
+						<div
+							className="selected-overlay-button umy-icon-arrow-plus-down rotate-clockwise"
+							style={insertLastSideButton}
+							title="Insert into selected as last child"
+							onClick={this.handleButtonClick(selectedKey, onLast)}
+							onMouseOver={this.handleMouseEnterLine}
+							onMouseOut={this.handleMouseLeaveLine}
+						/>
+						: null
+					}
+					{!isMultiple && newPos.width > 20 ?
 						<div
 							className="selected-overlay-button umy-icon-arrow-plus-up"
 							style={appendAfterButton}
