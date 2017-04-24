@@ -89,7 +89,9 @@ export function findComponent(index, componentName, namespace) {
 	let result = undefined;
 	if (index) {
 		if (componentName && namespace) {
-			result = index[namespace][componentName];
+			if (index[namespace]) {
+        result = index[namespace][componentName];
+			}
 		} else if (componentName) {
 			result = index[componentName];
 		}
