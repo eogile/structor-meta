@@ -1,1 +1,4 @@
-Component does not have notes
+#### Link from React Router
+
+Properties:
+* `to` - string value
