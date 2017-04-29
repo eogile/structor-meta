@@ -9,7 +9,9 @@ function wrapComponent(WrappedComponent, props) {
 	var klass = React.createClass({
 		subscribeToInitialState(){
 			if(initialState){
+				initialState.onMouseDown = {};
 				initialState.elements[key] = {
+					type,
 					getDOMNode: () => {
 						this.initDOMNode();
 						return this.$DOMNode[0];
@@ -56,6 +58,10 @@ function wrapComponent(WrappedComponent, props) {
 				e.preventDefault();
 				if(onMouseDown){
 					onMouseDown(key, e.metaKey || e.ctrlKey);
+				}
+				initialState.lastMousePos = {pageY: e.pageY, pageX: e.pageX};
+				if(initialState && initialState.onMouseDown[key]) {
+					initialState.onMouseDown[key](e);
 				}
 			}
 		},
