@@ -1,95 +1,7 @@
 import { forOwn, isObject, isString, extend, difference, keys, isEqual } from 'lodash';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import ComponentWrapper from './ComponentWrapper.js';
 import * as components from '../../app/components.js';
-
-function wrapComponent(WrappedComponent, props) {
-	const { onMouseDown, initialState, key, type } = props;
-	const myName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-	var klass = React.createClass({
-		subscribeToInitialState(){
-			if(initialState){
-				initialState.onMouseDown = {};
-				initialState.elements[key] = {
-					type,
-					getDOMNode: () => {
-						this.initDOMNode();
-						return this.$DOMNode[0];
-					}
-				}
-			}
-		},
-		initDOMNode(){
-			if(!this.$DOMNode){
-				this.$DOMNode = $(ReactDOM.findDOMNode(this));
-				this.$DOMNode
-					.on('mousedown', this.handleMouseDown)
-					.on('mouseover', this.handleMouseOver)
-					.on('mouseout', this.handleMouseOut)
-					.on('click', this.handleNoop)
-					.on('doubleclick', this.handleNoop)
-					.on('mouseup', this.handleNoop);
-			}
-		},
-		componentWillMount(){
-			this.subscribeToInitialState();
-		},
-		componentDidMount(){
-			this.initDOMNode();
-		},
-		componentWillUnmount(){
-			if(this.$DOMNode){
-				this.$DOMNode
-					.off('mousedown')
-					.off('mouseover')
-					.off('mouseout')
-					.off('click')
-					.off('doubleclick')
-					.off('mouseup');
-			}
-			this.$DOMNode = undefined;
-		},
-		componentWillReceiveProps(nextProps){
-			this.subscribeToInitialState();
-		},
-		handleMouseDown(e){
-			if(!e.shiftKey){
-				e.stopPropagation();
-				e.preventDefault();
-				if(onMouseDown){
-					onMouseDown(key, e.metaKey || e.ctrlKey);
-				}
-				initialState.lastMousePos = {pageY: e.pageY, pageX: e.pageX};
-				if(initialState && initialState.onMouseDown[key]) {
-					initialState.onMouseDown[key](e);
-				}
-			}
-		},
-		handleMouseOver(e){
-			if(initialState && initialState.onMouseOver){
-				this.initDOMNode();
-				initialState.onMouseOver({ targetDOMNode: this.$DOMNode[0], type, key});
-			}
-		},
-		handleMouseOut(e){
-			if(initialState && initialState.onMouseOut){
-				this.initDOMNode();
-				initialState.onMouseOut({ targetDOMNode: this.$DOMNode[0], remove: true});
-			}
-		},
-		handleNoop(e){
-			if(!e.shiftKey) {
-				e.stopPropagation();
-				e.preventDefault();
-			}
-		},
-		render: function(){
-			return <WrappedComponent {...this.props} />;
-		}
-	});
-	klass.displayName = myName;
-	return klass;
-}
 
 export function findComponent(index, componentName, namespace) {
 	let result = undefined;
@@ -136,12 +48,15 @@ export function createElement(node, initialState, mouseDownHandler, options){
 	try{
 		if(options.isEditModeOn){
 			const wrapperProps = {
-				onMouseDown: mouseDownHandler,
 				key: node.key,
+				onMouseDown: mouseDownHandler,
+				elementKey: node.key,
 				type: modelNode.type,
-				initialState: initialState
+				initialState: initialState,
+				wrappedProps: props,
+				wrappedComponent: type,
 			};
-			result = React.createElement(wrapComponent(type, wrapperProps), props, nestedElements);
+			result = React.createElement(ComponentWrapper, wrapperProps, nestedElements);
 		} else {
 			result = React.createElement(type, props, nestedElements);
 		}
