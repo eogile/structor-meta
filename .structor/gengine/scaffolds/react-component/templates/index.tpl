@@ -114,9 +114,15 @@ function processProps(props) {
  *
  */
 <% if(metadata.componentType === 'ES6 Class (Pure)') { %>
-import React, {PureComponent<% if(metadata.isPropertiesExample || !metadata.hasChildrenIncluded) {%>, PropTypes<%}%>} from 'react';
+import React, {PureComponent} from 'react';
+<% if(metadata.isPropertiesExample || !metadata.hasChildrenIncluded) {%>
+import PropTypes from 'prop-types';
+<%}%>
 <% } else if(metadata.componentType === 'ES6 Class') { %>
-import React, {Component<% if(metadata.isPropertiesExample || !metadata.hasChildrenIncluded) {%>, PropTypes<%}%>} from 'react';
+import React, {Component} from 'react';
+<% if(metadata.isPropertiesExample || !metadata.hasChildrenIncluded) {%>
+import PropTypes from 'prop-types';
+<%}%>
 <% } %>
 <% if(metadata.hasChildrenIncluded) { %><%= getComponentClassMemberImports(imports) %><%= getComponentClassDefaultImports(imports) %><%= getComponentClassNamespaceImports(imports) %><% } %>
 <% if(metadata.componentType === 'ES6 Class (Pure)') { %>

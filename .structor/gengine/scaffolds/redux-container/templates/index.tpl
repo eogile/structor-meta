@@ -116,9 +116,11 @@ function processProps(props) {
  *
  */
 <% if(metadata.componentType === 'ES6 Class (Pure)') { %>
-import React, {PureComponent, PropTypes} from 'react';
+import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 <% } else if(metadata.componentType === 'ES6 Class') { %>
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 <% } %>
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';

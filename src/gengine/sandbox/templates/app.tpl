@@ -114,7 +114,7 @@ function processProps(props) {
  *
  */
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 <%= getComponentClassMemberImports(imports) %><%= getComponentClassDefaultImports(imports) %><%= getComponentClassNamespaceImports(imports) %>
 class <%= componentName %> extends Component { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
