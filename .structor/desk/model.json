@@ -5,16 +5,35 @@
       "pagePath": "/home",
       "children": [
         {
-          "type": "h3",
+          "type": "div",
           "props": {
             "style": {
-              "textAlign": "center"
+              "display": "flex",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "padding": "1em"
             }
           },
           "children": [
             {
-              "type": "span",
-              "text": "Click on me and start creating a cool React component."
+              "type": "div",
+              "children": [
+                {
+                  "type": "h3",
+                  "props": {
+                    "style": {
+                      "padding": "1em",
+                      "textAlign": "center"
+                    }
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Click on me and start creating a new cool component."
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
