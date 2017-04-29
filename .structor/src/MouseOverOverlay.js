@@ -162,7 +162,7 @@ class MouseOverOverlay extends Component {
         position: position
       };
       if (newPos.height < 45) {
-        labelLine.top = '-21px';
+        labelLine.top = '-15px';
       } else {
         labelLine.top = '0px';
       }
