@@ -10,7 +10,8 @@ export function getFile(dataObject, templateText){
         throw Error('Wrong project configuration. \'appDirPath\' field is missing.');
     }
 
-    const {imports, model} = gengine.prepareModelWithImports(index, srcModel, namespace);
+    const {imports, model: srcModel1} = gengine.prepareModelWithImports(index, srcModel, namespace);
+    const {foundObjects, model} = gengine.prepareModelWithObjects(srcModel1);
 
     const absoluteComponentDirPath = namespace && namespace.length > 0 ?
         path.join(project.paths.appDirPath, 'modules', namespace, 'components', componentName)
@@ -20,7 +21,7 @@ export function getFile(dataObject, templateText){
     const absoluteComponentFilePath = path.join(absoluteComponentDirPath, 'index.js');
 
     const templateObject = {
-        model, imports, namespace, componentName, metadata
+        model, imports, foundObjects, namespace, componentName, metadata
     };
 
     let resultSource;

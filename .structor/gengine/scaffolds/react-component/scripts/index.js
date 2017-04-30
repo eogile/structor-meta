@@ -30,14 +30,18 @@ function getFile(dataObject, templateText) {
 
     var _gengine$prepareModel = _structorCommons.gengine.prepareModelWithImports(index, srcModel, namespace),
         imports = _gengine$prepareModel.imports,
-        model = _gengine$prepareModel.model;
+        srcModel1 = _gengine$prepareModel.model;
+
+    var _gengine$prepareModel2 = _structorCommons.gengine.prepareModelWithObjects(srcModel1),
+        foundObjects = _gengine$prepareModel2.foundObjects,
+        model = _gengine$prepareModel2.model;
 
     var absoluteComponentDirPath = namespace && namespace.length > 0 ? _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'components', componentName) : _path2.default.join(project.paths.appDirPath, 'components', componentName);
 
     var absoluteComponentFilePath = _path2.default.join(absoluteComponentDirPath, 'index.js');
 
     var templateObject = {
-        model: model, imports: imports, namespace: namespace, componentName: componentName, metadata: metadata
+        model: model, imports: imports, foundObjects: foundObjects, namespace: namespace, componentName: componentName, metadata: metadata
     };
 
     var resultSource = void 0;

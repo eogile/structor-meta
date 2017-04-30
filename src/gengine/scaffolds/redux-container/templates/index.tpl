@@ -75,8 +75,7 @@ function processStyle(styleObject) {
     return result;
 }
 
-function processProps(props) {
-
+function processProps (props) {
     var result = '';
     if (props && !_.isEmpty(props)) {
         _.forOwn(props, function (value, prop) {
@@ -84,26 +83,76 @@ function processProps(props) {
                 result += prop + "=\"" + value + "\"";
             } else if (_.isBoolean(value) || _.isNumber(value)) {
                 result += prop + "={" + value + "} ";
-            } else if (_.isArray(value)) {
-                var arrayString = '';
-                _.forEach(value, function (item) {
-                    if (_.isObject(item) && !_.isEmpty(item)) {
-                        arrayString += '{ ' + processStyle(item) + ' },';
-                    } else {
-                        if (_.isString(item) && item.length > 0) {
-                            arrayString += "\'" + item + "\',";
-                        } else if (_.isBoolean(item) || _.isNumber(item)) {
-                            arrayString += item + ',';
-                        }
-                    }
-                });
-                result += prop + '={[ ' + arrayString.substr(0, arrayString.length - 1) + ']}';
             } else if (_.isObject(value) && !_.isEmpty(value)) {
                 if (value['type']) {
                     result += prop + "={ " + processChild(value) + " }";
-                } else {
-                    result += prop + "={{ " + processStyle(value) + " }} ";
+                } else if(value.newPropName) {
+                    result += prop + "={ " + value.newPropName + " } ";
                 }
+            }
+        });
+    }
+    return result;
+}
+
+function processPrimitive (value, prop) {
+    var result = '';
+    if (_.isString(value) && value.length > 0) {
+        if (prop) {
+            result += prop + ": '" + value + "'";
+        } else {
+            result += "'" + value + "'";
+        }
+    } else if (_.isBoolean(value) || _.isNumber(value)) {
+        if (prop) {
+            result += prop + ": " + value;
+        } else {
+            result += value;
+        }
+    }
+    return result;
+}
+
+function processArray (array) {
+    var result = '';
+    if (array) {
+        array.forEach(function (item) {
+            if (_.isObject(item)) {
+                result += processObject(item) + ',';
+            } else {
+                result += processPrimitive(item) + ',';
+            }
+        });
+        result = '[' + result.substr(0, result.length - 1) + ']';
+    }
+    return result;
+}
+
+function processObject (obj) {
+    var result = '';
+    if (obj) {
+        _.forOwn(obj, function (value, prop) {
+            if (_.isArray(value)) {
+                result += prop + ': ' + processArray(value) + ',';
+            } else if (_.isObject(value)) {
+                result += prop + ': ' + processObject(value) + ',';
+            } else {
+                result += processPrimitive(value, prop) + ',';
+            }
+        });
+        result = '{ ' + result.substr(0, result.length - 1) + '}';
+    }
+    return result;
+}
+
+function processObjects (objects) {
+    var result = '';
+    if (objects && objects.length > 0) {
+        objects.forEach(function (obj) {
+            if (obj.isArray) {
+                result += 'const ' + obj.newPropName + '= ' + processArray(obj.objectValue) + ';\n';
+            } else if (obj.isObject) {
+                result += 'const ' + obj.newPropName + '= ' + processObject(obj.objectValue) + ';\n';
             }
         });
     }
@@ -126,7 +175,14 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectName } from './selectors';
 import { sampleAction } from './actions';
-<% if(metadata.hasChildrenIncluded) { %><%= getComponentClassMemberImports(imports) %><%= getComponentClassDefaultImports(imports) %><%= getComponentClassNamespaceImports(imports) %><% } %>
+<% if(metadata.hasChildrenIncluded) { %>
+<%= getComponentClassMemberImports(imports) %>
+<%= getComponentClassDefaultImports(imports) %>
+<%= getComponentClassNamespaceImports(imports) %>
+<% } %>
+
+<%= processObjects(foundObjects)  %>
+
 <% if(metadata.componentType === 'ES6 Class (Pure)') { %>
 class <%= componentName %> extends PureComponent { // eslint-disable-line react/prefer-stateless-function
 <% } else if(metadata.componentType === 'ES6 Class') { %>
