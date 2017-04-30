@@ -5,8 +5,25 @@
     "props": {},
     "children": [
       {
-        "type": "span",
-        "text": "Empty div"
+        "type": "div",
+        "variant": "default",
+        "props": {
+          "style": {
+            "display": "flex",
+            "justifyContent": "center",
+            "height": "100px",
+            "alignItems": "center",
+            "backgroundColor": "#fcecd7",
+            "borderRadius": "4px"
+          }
+        },
+        "children": [
+          {
+            "type": "span",
+            "text": "Empty div",
+            "props": {}
+          }
+        ]
       }
     ]
   }
