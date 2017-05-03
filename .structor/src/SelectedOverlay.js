@@ -198,7 +198,18 @@ class SelectedOverlay extends Component {
   render () {
     const {newPos, isOverlay, mousePos, componentName} = this.state;
     const {selectedKey, isMultipleSelected, showBlueprintButtons, initialState: {lastMousePos}} = this.props;
-    const {initialState: {onCopy, onCut, onBefore, onFirst, onLast, onAfter, onReplace, onSelectParent}} = this.props;
+    const {initialState: {
+      onCopy,
+      onCut,
+      onBefore,
+      onFirst,
+      onLast,
+      onAfter,
+      onReplace,
+      onSelectParent,
+      onDelete,
+      onClone
+    }} = this.props;
     let content;
     if (newPos) {
       const endPoint = {
@@ -343,9 +354,23 @@ class SelectedOverlay extends Component {
               onMouseOut={this.handleMouseLeaveLine}
             />
             <div
+              className="mouse-bottom-left-second-btn mouse-rectangle-btn umy-icon-duplicate"
+              title="Clone selected"
+              onClick={this.handleButtonClick(selectedKey, onClone)}
+              onMouseOver={this.handleMouseEnterLine}
+              onMouseOut={this.handleMouseLeaveLine}
+            />
+            <div
               className="mouse-left-center-btn mouse-circle-btn umy-icon-arrow-plus-up rotate-clockwise"
               title="Insert into selected as first child"
               onClick={this.handleButtonClick(selectedKey, onFirst)}
+              onMouseOver={this.handleMouseEnterLine}
+              onMouseOut={this.handleMouseLeaveLine}
+            />
+            <div
+              className="mouse-left-center-second-btn mouse-rectangle-btn umy-icon-delete mouse-button-warning"
+              title="Delete selected"
+              onClick={this.handleButtonClick(selectedKey, onDelete)}
               onMouseOver={this.handleMouseEnterLine}
               onMouseOut={this.handleMouseLeaveLine}
             />

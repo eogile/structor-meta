@@ -146,10 +146,22 @@
     left: -32px;
 }
 
+.mouse-bottom-left-second-btn {
+    position: absolute;
+    top: 16px;
+    left: -56px;
+}
+
 .mouse-left-center-btn {
     position: absolute;
     top: -8px;
     left: -32px;
+}
+
+.mouse-left-center-second-btn {
+    position: absolute;
+    top: -8px;
+    left: -56px;
 }
 
 .mouse-circle-btn {
