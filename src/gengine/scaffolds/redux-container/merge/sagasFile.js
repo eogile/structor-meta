@@ -12,14 +12,14 @@ export function getFile(dataObject, dependencies){
     let reducerFilePath;
     let sourceCode;
     if (namespace && namespace.length > 0) {
-        reducerFilePath = path.join('modules', namespace, 'sagas.js');
+        reducerFilePath = path.join('modules', namespace, 'sagas.js').replace(/\\/g, '/');
         sourceCode = gengine.injectModuleSaga(
             index.sagasSourceCode,
             `${namespace}Sagas`,
             reducerFilePath
         );
     } else {
-        reducerFilePath = path.join('containers', componentName, 'sagas.js');
+        reducerFilePath = path.join('containers', componentName, 'sagas.js').replace(/\\/g, '/');
         sourceCode = gengine.injectSaga(
             index.sagasSourceCode,
             `${componentName}Sagas`,

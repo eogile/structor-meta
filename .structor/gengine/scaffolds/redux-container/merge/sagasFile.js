@@ -29,10 +29,10 @@ function getFile(dataObject, dependencies) {
     var reducerFilePath = void 0;
     var sourceCode = void 0;
     if (namespace && namespace.length > 0) {
-        reducerFilePath = _path2.default.join('modules', namespace, 'sagas.js');
+        reducerFilePath = _path2.default.join('modules', namespace, 'sagas.js').replace(/\\/g, '/');
         sourceCode = _structorCommons.gengine.injectModuleSaga(index.sagasSourceCode, namespace + 'Sagas', reducerFilePath);
     } else {
-        reducerFilePath = _path2.default.join('containers', componentName, 'sagas.js');
+        reducerFilePath = _path2.default.join('containers', componentName, 'sagas.js').replace(/\\/g, '/');
         sourceCode = _structorCommons.gengine.injectSaga(index.sagasSourceCode, componentName + 'Sagas', reducerFilePath);
     }
 

@@ -12,7 +12,7 @@ export function getFile(dataObject, dependencies){
     let reducerFilePath;
     let sourceCode;
     if (namespace && namespace.length > 0) {
-        reducerFilePath = path.join('modules', namespace, 'reducer.js');
+        reducerFilePath = path.join('modules', namespace, 'reducer.js').replace(/\\/g, '/');
         sourceCode = gengine.injectReducer(
             index.reducersSourceCode,
             namespace,
@@ -20,7 +20,7 @@ export function getFile(dataObject, dependencies){
             reducerFilePath
         );
     } else {
-        reducerFilePath = path.join('containers', componentName, 'reducer.js');
+        reducerFilePath = path.join('containers', componentName, 'reducer.js').replace(/\\/g, '/');
         sourceCode = gengine.injectReducer(
             index.reducersSourceCode,
             metadata.reducerKeyProperty,

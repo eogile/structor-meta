@@ -36,14 +36,14 @@ function getFile(dataObject, dependencies) {
     if (namespace && namespace.length > 0) {
         var sourceCode = void 0;
         var module = index.modules[namespace];
-        var relativeFilePath = './' + _path2.default.join('containers', componentName, 'reducer.js');
+        var relativeFilePath = './' + _path2.default.join('containers', componentName, 'reducer.js').replace(/\\/g, '/');
         var outputFilePath = void 0;
         if (module && module.reducerFilePath && module.reducerSourceCode) {
             sourceCode = _structorCommons.gengine.injectModuleReducer(module.reducerSourceCode, metadata.reducerKeyProperty, metadata.reducerKeyProperty + 'Reducer', relativeFilePath);
             outputFilePath = module.reducerFilePath;
         } else {
             sourceCode = reducerTemplate(metadata.reducerKeyProperty, metadata.reducerKeyProperty + 'Reducer', relativeFilePath);
-            outputFilePath = _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'reducer.js');
+            outputFilePath = _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'reducer.js').replace(/\\/g, '/');
         }
         return {
             outputFilePath: outputFilePath,

@@ -10,10 +10,10 @@ export function getFile(dataObject, dependencies){
     if (index && index.indexFilePath && index.indexSourceCode) {
         let ast = commons.parse(index.indexSourceCode);
         if (namespace && namespace.length > 0) {
-            ast = commons.addNamespaceImport(ast, namespace, path.join('modules', namespace));
+            ast = commons.addNamespaceImport(ast, namespace, path.join('modules', namespace).replace(/\\/g, '/'));
             ast = commons.addNamedExport(ast, namespace);
         } else {
-            ast = commons.addDefaultImport(ast, componentName, path.join('components', componentName));
+            ast = commons.addDefaultImport(ast, componentName, path.join('components', componentName).replace(/\\/g, '/'));
             ast = commons.addNamedExport(ast, componentName);
         }
         sourceCode = commons.generate(ast);

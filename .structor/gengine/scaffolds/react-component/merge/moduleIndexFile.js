@@ -36,7 +36,7 @@ function getFile(dataObject, dependencies) {
     if (namespace && namespace.length > 0) {
         var sourceCode = void 0;
         var module = index.modules[namespace];
-        var relativeFilePath = './' + _path2.default.join('components', componentName);
+        var relativeFilePath = './' + _path2.default.join('components', componentName).replace(/\\/g, '/');
         var outputFilePath = void 0;
         if (module) {
             if (module.indexFilePath && module.indexSourceCode) {
@@ -50,7 +50,7 @@ function getFile(dataObject, dependencies) {
             }
         } else {
             sourceCode = indexTemplate(componentName, relativeFilePath);
-            outputFilePath = _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'index.js');
+            outputFilePath = _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'index.js').replace(/\\/g, '/');
         }
         return {
             outputFilePath: outputFilePath,

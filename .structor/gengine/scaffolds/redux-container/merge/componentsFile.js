@@ -25,9 +25,9 @@ function getFile(dataObject, dependencies) {
     var sourceCode = void 0;
     if (index && index.indexFilePath && index.indexSourceCode) {
         if (namespace && namespace.length > 0) {
-            sourceCode = _structorCommons.gengine.injectNamespaceComponent(index.indexSourceCode, namespace, _path2.default.join('modules', namespace));
+            sourceCode = _structorCommons.gengine.injectNamespaceComponent(index.indexSourceCode, namespace, _path2.default.join('modules', namespace).replace(/\\/g, '/'));
         } else {
-            sourceCode = _structorCommons.gengine.injectModuleComponent(index.indexSourceCode, componentName, _path2.default.join('containers', componentName));
+            sourceCode = _structorCommons.gengine.injectModuleComponent(index.indexSourceCode, componentName, _path2.default.join('containers', componentName).replace(/\\/g, '/'));
         }
     } else {
         throw Error('Components index file was not found.');

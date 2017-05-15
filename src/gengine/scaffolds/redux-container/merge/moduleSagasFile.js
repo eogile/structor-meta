@@ -24,7 +24,7 @@ export function getFile(dataObject, dependencies){
     if (namespace && namespace.length > 0) {
         let sourceCode;
         const module = index.modules[namespace];
-        const relativeFilePath = './' + path.join('containers', componentName, 'sagas.js');
+        const relativeFilePath = './' + path.join('containers', componentName, 'sagas.js').replace(/\\/g, '/');
         let outputFilePath;
         if (module && module.sagasFilePath && module.sagasSourceCode) {
             sourceCode = gengine.injectModuleSaga(

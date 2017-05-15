@@ -36,7 +36,7 @@ function getFile(dataObject, dependencies) {
     if (namespace && namespace.length > 0) {
         var sourceCode = void 0;
         var module = index.modules[namespace];
-        var relativeFilePath = './' + _path2.default.join('containers', componentName, 'sagas.js');
+        var relativeFilePath = './' + _path2.default.join('containers', componentName, 'sagas.js').replace(/\\/g, '/');
         var outputFilePath = void 0;
         if (module && module.sagasFilePath && module.sagasSourceCode) {
             sourceCode = _structorCommons.gengine.injectModuleSaga(module.sagasSourceCode, componentName + 'Sagas', relativeFilePath);

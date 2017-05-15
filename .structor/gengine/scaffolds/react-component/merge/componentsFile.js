@@ -28,10 +28,10 @@ function getFile(dataObject, dependencies) {
     if (index && index.indexFilePath && index.indexSourceCode) {
         var ast = _structorCommons.commons.parse(index.indexSourceCode);
         if (namespace && namespace.length > 0) {
-            ast = _structorCommons.commons.addNamespaceImport(ast, namespace, _path2.default.join('modules', namespace));
+            ast = _structorCommons.commons.addNamespaceImport(ast, namespace, _path2.default.join('modules', namespace).replace(/\\/g, '/'));
             ast = _structorCommons.commons.addNamedExport(ast, namespace);
         } else {
-            ast = _structorCommons.commons.addDefaultImport(ast, componentName, _path2.default.join('components', componentName));
+            ast = _structorCommons.commons.addDefaultImport(ast, componentName, _path2.default.join('components', componentName).replace(/\\/g, '/'));
             ast = _structorCommons.commons.addNamedExport(ast, componentName);
         }
         sourceCode = _structorCommons.commons.generate(ast);

@@ -36,14 +36,14 @@ function getFile(dataObject, dependencies) {
     if (namespace && namespace.length > 0) {
         var sourceCode = void 0;
         var module = index.modules[namespace];
-        var relativeFilePath = './' + _path2.default.join('containers', componentName);
+        var relativeFilePath = './' + _path2.default.join('containers', componentName).replace(/\\/g, '/');
         var outputFilePath = void 0;
         if (module && module.indexFilePath && module.indexSourceCode) {
             sourceCode = _structorCommons.gengine.injectModuleComponent(module.indexSourceCode, componentName, relativeFilePath);
             outputFilePath = module.indexFilePath;
         } else {
             sourceCode = indexTemplate(componentName, relativeFilePath);
-            outputFilePath = _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'index.js');
+            outputFilePath = _path2.default.join(project.paths.appDirPath, 'modules', namespace, 'index.js').replace(/\\/g, '/');
         }
         return {
             outputFilePath: outputFilePath,

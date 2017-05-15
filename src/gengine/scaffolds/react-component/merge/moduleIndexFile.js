@@ -25,7 +25,7 @@ export function getFile(dataObject, dependencies){
     if (namespace && namespace.length > 0) {
         let sourceCode;
         const module = index.modules[namespace];
-        const relativeFilePath = './' + path.join('components', componentName);
+        const relativeFilePath = './' + path.join('components', componentName).replace(/\\/g, '/');
         let outputFilePath;
         if (module) {
             if (module.indexFilePath && module.indexSourceCode) {
@@ -39,7 +39,7 @@ export function getFile(dataObject, dependencies){
             }
         } else {
             sourceCode = indexTemplate(componentName, relativeFilePath);
-            outputFilePath = path.join(project.paths.appDirPath, 'modules', namespace, 'index.js');
+            outputFilePath = path.join(project.paths.appDirPath, 'modules', namespace, 'index.js').replace(/\\/g, '/');
         }
         return {
             outputFilePath,

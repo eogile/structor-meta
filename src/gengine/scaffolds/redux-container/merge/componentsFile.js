@@ -11,13 +11,13 @@ export function getFile(dataObject, dependencies){
             sourceCode = gengine.injectNamespaceComponent(
                 index.indexSourceCode,
                 namespace,
-                path.join('modules', namespace)
+                path.join('modules', namespace).replace(/\\/g, '/')
             );
         } else {
             sourceCode = gengine.injectModuleComponent(
                 index.indexSourceCode,
                 componentName,
-                path.join('containers', componentName)
+                path.join('containers', componentName).replace(/\\/g, '/')
             );
         }
     } else {

@@ -25,7 +25,7 @@ export function getFile(dataObject, dependencies){
     if (namespace && namespace.length > 0) {
         let sourceCode;
         const module = index.modules[namespace];
-        const relativeFilePath = './' + path.join('containers', componentName);
+        const relativeFilePath = './' + path.join('containers', componentName).replace(/\\/g, '/');
         let outputFilePath;
         if (module && module.indexFilePath && module.indexSourceCode) {
             sourceCode = gengine.injectModuleComponent(
@@ -36,7 +36,7 @@ export function getFile(dataObject, dependencies){
             outputFilePath = module.indexFilePath;
         } else {
             sourceCode = indexTemplate(componentName, relativeFilePath);
-            outputFilePath = path.join(project.paths.appDirPath, 'modules', namespace, 'index.js');
+            outputFilePath = path.join(project.paths.appDirPath, 'modules', namespace, 'index.js').replace(/\\/g, '/');
         }
         return {
             outputFilePath,
