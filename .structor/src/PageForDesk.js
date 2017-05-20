@@ -3,118 +3,108 @@ import { isEqual } from 'lodash';
 import { getPagePathName } from './commons/constants.js';
 import pageDefaultModel from './commons/model.js';
 import { createElements } from './commons/pageUtils.js';
+import Context from './commons/Context.js';
 
 import MouseOverOverlay from './MouseOverOverlay.js';
 import SelectedOverlay from './SelectedOverlay.js';
 import HighlightedOverlay from './HighlightedOverlay.js';
 import ClipboardOverlay from './ClipboardOverlay.js';
+import MouseMenuOverlay from './MouseMenuOverlay';
 
 class PageForDesk extends Component {
 
   constructor (props, content) {
     super(props, content);
-
+    this.elementTree = [];
+    this.pageContext = new Context();
     this.state = {
       isEditModeOn: true,
       updateCounter: 0
     };
-    this.elementTree = [];
-    this.initialState = {elements: {}};
 
+    this.changePath = this.changePath.bind(this);
+    this.changeRealPath = this.changeRealPath.bind(this);
     this.updatePageModel = this.updatePageModel.bind(this);
-    this.bindGetPagePath = this.bindGetPagePath.bind(this);
-    this.bindGetPageModel = this.bindGetPageModel.bind(this);
-    this.bindGetMarked = this.bindGetMarked.bind(this);
-    this.bindGetShowBlueprintButtons = this.bindGetShowBlueprintButtons.bind(this);
-    this.bindOnComponentMouseDown = this.bindOnComponentMouseDown.bind(this);
-    this.getModelByPathname = this.getModelByPathname.bind(this);
     this.updateMarks = this.updateMarks.bind(this);
-  }
-
-  bindGetPagePath (func) {
-    this.getPagePath = func;
-  }
-
-  bindGetPageModel (func) {
-    this.getPageModel = func;
-  }
-
-  bindGetMarked (func) {
-    this.getMarked = func;
-  }
-
-  bindGetMode (func) {
-    this.getMode = func;
-  }
-
-  bindGetShowBlueprintButtons (func) {
-    this.getShowBlueprintButtons = func;
-  }
-
-  bindOnComponentMouseDown (func) {
-    this.onComponentMouseDown = func;
-  }
-
-  bindOnPathnameChanged (func) {
-    this.onPathnameChanged = func;
-  }
-
-  bindToState (signature, func) {
-    this.initialState[signature] = func;
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleContextMenu = this.handleContextMenu.bind(this);
   }
 
   componentDidMount () {
     if (window.onPageDidMount) {
       window.onPageDidMount(this);
-      if (this.updatePageModel) {
-        const pathname = getPagePathName(this.props.location.pathname);
-        const nextPagePath = this.getPagePath(pathname);
-        this.updatePageModel({
-          pathname: nextPagePath
-        });
-        if (this.onPathnameChanged) {
-          this.onPathnameChanged(nextPagePath);
-        }
-      }
+      this.changeRealPath(window.location.pathname);
     }
   }
 
   componentWillUnmount () {
-    this.initialState = undefined;
+    this.pageContext.clear();
     this.elementTree = undefined;
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.location.pathname !== this.props.location.pathname
-      || isEqual(nextProps.location.query, this.props.location.query)) {
-      const pathname = getPagePathName(nextProps.location.pathname);
-      const nextPagePath = this.getPagePath(pathname);
-      this.updatePageModel({
-        pathname: nextPagePath
-      });
-      if (this.onPathnameChanged) {
-        this.onPathnameChanged(nextPagePath);
-      }
+  handleMouseDown (e) {
+    const {isEditModeOn} = this.state;
+    if (isEditModeOn) {
+      this.pageContext.trigger('mouseDown', e);
     }
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    return (this.state.updateCounter !== nextProps.updateCounter);
+  handleContextMenu (e) {
+    const {isEditModeOn} = this.state;
+    if (isEditModeOn) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  }
+
+  getContext () {
+    return this.pageContext;
+  }
+
+  changePath (pagePathname) {
+    const {get, trigger} = this.pageContext;
+    this.updatePageModel({
+      pathname: pagePathname
+    });
+    trigger('pathnameChanged', pagePathname);
+  }
+
+  changeRealPath (realPathname) {
+    const {get, trigger} = this.pageContext;
+    const pathname = getPagePathName(realPathname);
+    const nextPagePath = get('pagePath', pathname);
+    this.updatePageModel({
+      pathname: nextPagePath
+    });
+    trigger('pathnameChanged', nextPagePath);
   }
 
   updatePageModel (options) {
-    let {pathname} = options;
-    let pageModel = this.getModelByPathname(pathname);
-    // console.log('Page model: ', JSON.stringify(pageModel, null, 4));
-    const isEditModeOn = this.getMode();
-    this.elementTree = createElements(pageModel, this.initialState, this.onComponentMouseDown, {
-      isEditModeOn: isEditModeOn
-    });
+    const {} = this.pageContext;
+    const {pathname} = options;
+    const {get} = this.pageContext;
+    const isEditModeOn = get('mode');
+    let pageModel = get('pageModel', pathname);
+    if (!pageModel) {
+      pageModel = pageDefaultModel;
+      pageModel.children[0].children[0].modelNode.text =
+        'Route was not found: ' + pathname + '. Try to select another route.';
+    }
+    this.elementTree = createElements(
+      pageModel,
+      this.pageContext,
+      isEditModeOn
+    );
     this.setState({
       pathname: pathname,
       isEditModeOn: isEditModeOn,
       updateCounter: this.state.updateCounter + 1
     });
+    if (isEditModeOn) {
+      $('html').on('contextmenu', this.handleContextMenu);
+    } else {
+      $('html').off('contextmenu');
+    }
   }
 
   updateMarks (options) {
@@ -125,32 +115,22 @@ class PageForDesk extends Component {
     });
   }
 
-  getModelByPathname (pathname) {
-    let pageModel = this.getPageModel(pathname);
-    if (!pageModel) {
-      pageModel = pageDefaultModel;
-      pageModel.children[0].children[0].modelNode.text =
-        'Route was not found: ' + pathname + '. Try to select another route.';
-    }
-    return pageModel;
-  }
-
   render () {
+    const {isEditModeOn, pathname} = this.state;
     let boundaryOverlays = [];
     let selectedKeys = undefined;
-    if (this.state.isEditModeOn && this.state.pathname) {
-      const showBlueprintButtons = this.getShowBlueprintButtons ? this.getShowBlueprintButtons() : true;
-      const {selected, highlighted, forCutting, forCopying} = this.getMarked(this.state.pathname);
+    if (isEditModeOn && pathname) {
+      const {get} = this.pageContext;
+      const {selected, highlighted, forCutting, forCopying} = get('marked', pathname);
       if (selected && selected.length > 0) {
         selectedKeys = selected;
         selected.forEach(key => {
           boundaryOverlays.push(
             <SelectedOverlay
               key={'selected' + key}
-              initialState={this.initialState}
+              context={this.pageContext}
               selectedKey={key}
               isMultipleSelected={selected.length > 1}
-              showBlueprintButtons={showBlueprintButtons}
             />
           );
         });
@@ -160,7 +140,7 @@ class PageForDesk extends Component {
           boundaryOverlays.push(
             <ClipboardOverlay
               key={'forCutting' + key}
-              initialState={this.initialState}
+              context={this.pageContext}
               bSize="2px"
               bStyle="dotted #f0ad4e"
               selectedKey={key}
@@ -173,7 +153,7 @@ class PageForDesk extends Component {
           boundaryOverlays.push(
             <ClipboardOverlay
               key={'forCopying' + key}
-              initialState={this.initialState}
+              context={this.pageContext}
               bSize="2px"
               bStyle="dotted #5cb85c"
               selectedKey={key}
@@ -186,7 +166,7 @@ class PageForDesk extends Component {
           boundaryOverlays.push(
             <HighlightedOverlay
               key={'highlighted' + key}
-              initialState={this.initialState}
+              context={this.pageContext}
               selectedKey={key}
             />
           );
@@ -194,17 +174,25 @@ class PageForDesk extends Component {
       }
     }
     return (
-      <div id="pageContainer" style={{padding: '0.1px'}}>
+      <div
+        id="pageContainer"
+        style={{padding: '0.1px'}}
+        className={isEditModeOn ? "structor_unselectable" : ""}
+        onMouseDown={this.handleMouseDown}
+        onContextMenu={this.handleContextMenu}
+      >
         {this.elementTree}
         {boundaryOverlays}
-        {this.state.isEditModeOn ? <MouseOverOverlay
-          key="mouseOverBoundary"
-          ref="mouseOverBoundary"
-          initialState={this.initialState}
-          selectedKeys={selectedKeys}
-          bSize="1px"
-        />
+        {isEditModeOn ?
+          <MouseOverOverlay
+            context={this.pageContext}
+            selectedKeys={selectedKeys}
+            bSize="1px"
+          />
           : null
+        }
+        {isEditModeOn &&
+          <MouseMenuOverlay context={this.pageContext} />
         }
       </div>
     );

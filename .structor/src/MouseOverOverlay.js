@@ -7,6 +7,10 @@ const position = 'absolute';
 const borderStyle = 'solid #35b3ee';
 const borderSize = '2px';
 
+const style = {
+  display: 'none'
+};
+
 class MouseOverOverlay extends Component {
 
   constructor (props) {
@@ -16,30 +20,25 @@ class MouseOverOverlay extends Component {
       border: '' + (props.bSize ? props.bSize : borderSize) + ' ' + (props.bStyle ? props.bStyle : borderStyle)
     };
     this.refreshPosition = this.refreshPosition.bind(this);
-    this.subscribeToInitialState = this.subscribeToInitialState.bind(this);
+    this.updatePosition = this.updatePosition.bind(this);
+    this.resetPosition = this.resetPosition.bind(this);
   }
 
   componentDidMount () {
-    this.subscribeToInitialState();
+    const {context} = this.props;
+    if (context) {
+      console.log(context);
+      context.addListener('mouseOver.boundaries', this.updatePosition);
+      context.addListener('mouseOut.boundaries', this.updatePosition);
+    }
   }
 
   componentWillUnmount () {
     this.$DOMNode = undefined;
-  }
-
-  // componentDidUpdate(){
-  //     this.subscribeToInitialState();
-  // }
-
-  subscribeToInitialState () {
-    const {initialState} = this.props;
-    if (initialState) {
-      initialState.onMouseOver = (options) => {
-        this.updatePosition(options);
-      };
-      initialState.onMouseOut = (options) => {
-        this.updatePosition(options);
-      };
+    const {context} = this.props;
+    if (context) {
+      context.removeListener('mouseOver.boundaries');
+      context.removeListener('mouseOut.boundaries');
     }
   }
 
@@ -104,9 +103,7 @@ class MouseOverOverlay extends Component {
   }
 
   render () {
-    const {selectedKeys} = this.props;
     const {newPos, border} = this.state;
-    let isLabelShown = false;
     let content;
     if (newPos) {
       const endPoint = {
@@ -166,27 +163,21 @@ class MouseOverOverlay extends Component {
       } else {
         labelLine.top = '0px';
       }
-      isLabelShown = !selectedKeys || selectedKeys.length <= 0 || selectedKeys.indexOf(newPos.key) < 0;
       content = (
         <div style={endPoint}>
           <div style={topLine} />
           <div style={leftLine} />
           <div style={bottomLine} />
           <div style={rightLine} />
-          {isLabelShown &&
           <span
-            className="mouse-overlay-label"
+            className="structor_mouse-overlay-label"
             style={labelLine}
           >
-                        {newPos.label}
-                    </span>
-          }
+            {newPos.label}
+          </span>
         </div>
       );
     } else {
-      const style = {
-        display: 'none'
-      };
       content = (<span style={style}/>);
     }
     return content;

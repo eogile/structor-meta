@@ -27,7 +27,6 @@ class ClipboardOverlay extends Component {
 
   constructor (props) {
     super(props);
-    this.isSubscribed = false;
     this.state = {
       newPos: null,
       border: '' + (props.bSize ? props.bSize : borderSize) + ' ' + (props.bStyle ? props.bStyle : borderStyle),
@@ -56,23 +55,20 @@ class ClipboardOverlay extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    this.isSubscribed = false;
+    this.subscribeToInitialState();
   }
 
   subscribeToInitialState () {
-    if (!this.isSubscribed) {
-      const {selectedKey, initialState} = this.props;
-      if (selectedKey && initialState) {
-        const selected = initialState.elements[selectedKey];
-        if (selected) {
-          const targetDOMNode = selected.getDOMNode();
-          this.setSelectedPosition({targetDOMNode});
-        } else {
-          this.resetTimer();
-          this.setState({newPos: null});
-        }
+    const {selectedKey, context} = this.props;
+    if (selectedKey && context) {
+      const selected = context.getElement(selectedKey);
+      if (selected) {
+        const targetDOMNode = selected.getDOMNode();
+        this.setSelectedPosition({targetDOMNode});
+      } else {
+        this.resetTimer();
+        this.setState({newPos: null});
       }
-      this.isSubscribed = true;
     }
   }
 

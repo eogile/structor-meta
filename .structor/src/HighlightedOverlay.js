@@ -25,7 +25,6 @@ class HighlightedOverlay extends Component {
 
   constructor (props) {
     super(props);
-    this.isSubscribed = false;
     this.state = {
       newPos: null
     };
@@ -42,9 +41,9 @@ class HighlightedOverlay extends Component {
   }
 
   subscribeToInitialState () {
-    const {selectedKey, initialState} = this.props;
-    if (selectedKey && initialState) {
-      const element = initialState.elements[selectedKey];
+    const {selectedKey, context} = this.props;
+    if (selectedKey && context) {
+      const element = context.getElement(selectedKey);
       if (element) {
         const targetDOMNode = element.getDOMNode();
         this.setSelectedPosition({targetDOMNode});
@@ -96,14 +95,17 @@ class HighlightedOverlay extends Component {
       };
       content = (
         <div style={endPoint}>
-          <div className="selected-overlay-highlighted" style={highlightedBox}></div>
+          <div
+            className="structor_selected-overlay-highlighted"
+            style={highlightedBox}
+          />
         </div>
       );
     } else {
       const style = {
         display: 'none'
       };
-      content = (<span style={style}></span>);
+      content = (<span style={style} />);
     }
     return content;
   }

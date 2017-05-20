@@ -1,5 +1,5 @@
 import { forOwn, isObject, isString, extend, difference, keys, isEqual } from 'lodash';
-import React, { Component } from 'react';
+import React from 'react';
 import ComponentWrapper from './ComponentWrapper.js';
 import * as components from '../../app/components.js';
 
@@ -20,7 +20,7 @@ export function findComponent(index, componentName, namespace) {
 	return result;
 }
 
-export function createElement(node, initialState, mouseDownHandler, options){
+export function createElement(node, context, isEditModeOn){
 
 	let modelNode = node.modelNode;
 	let type = findComponent(components, modelNode.type, modelNode.namespace);
@@ -28,7 +28,7 @@ export function createElement(node, initialState, mouseDownHandler, options){
 
 	if(node.props){
 		forOwn(node.props, (prop, propName) => {
-			props[propName] = createElement(prop, initialState, mouseDownHandler, options);
+			props[propName] = createElement(prop, context, isEditModeOn);
 		});
 	}
 
@@ -37,7 +37,7 @@ export function createElement(node, initialState, mouseDownHandler, options){
 	if(node.children && node.children.length > 0){
 		let children = [];
 		node.children.forEach(node => {
-			children.push(createElement(node, initialState, mouseDownHandler, options));
+			children.push(createElement(node, context, isEditModeOn));
 		});
 		nestedElements = children;
 	} else if(modelNode.text) {
@@ -46,13 +46,12 @@ export function createElement(node, initialState, mouseDownHandler, options){
 
 	let result = null;
 	try{
-		if(options.isEditModeOn){
+		if(isEditModeOn){
 			const wrapperProps = {
 				key: node.key,
-				onMouseDown: mouseDownHandler,
 				elementKey: node.key,
 				type: modelNode.type,
-				initialState: initialState,
+				context: context,
 				wrappedProps: props,
 				wrappedComponent: type,
 			};
@@ -95,12 +94,12 @@ export function createElement(node, initialState, mouseDownHandler, options){
 	return result;
 }
 
-export function createElements(model, initialState, mouseDownHandler, options){
-	initialState.elements = {};
+export function createElements(model, context, isEditModeOn){
+	context.cleanElements();
 	let elements = [];
 	if(model && model.children && model.children.length > 0){
 		model.children.forEach(child => {
-			elements.push(createElement(child, initialState, mouseDownHandler, options));
+			elements.push(createElement(child, context, isEditModeOn));
 		});
 	}
 	return elements;
