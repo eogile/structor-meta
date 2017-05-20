@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import MouseMenu, {MENU_WIDTH, MENU_HEIGHT} from './MouseMenu';
+import ContextMenu, {MENU_WIDTH, MENU_HEIGHT} from './ContextMenu';
 
 class MouseMenuOverlay extends Component {
 
   constructor (props) {
     super(props);
     this.setPosition = this.setPosition.bind(this);
+    this.renewPosition = this.renewPosition.bind(this);
+    this.closeMenu = this.closeMenu.bind(this);
     this.state = {
       showMenu: false,
       mousePos: {},
@@ -13,8 +15,6 @@ class MouseMenuOverlay extends Component {
   }
 
   componentDidMount () {
-    this.bodyWidth = document.body.clientWidth;
-    this.bodyHeight = document.body.clientHeight;
     const {context} = this.props;
     if (context) {
       context.addListener('mouseDown.mousemenu', this.setPosition);
@@ -37,8 +37,19 @@ class MouseMenuOverlay extends Component {
     });
   }
 
+  renewPosition (pageX, pageY) {
+    this.setState({
+      mousePos: {pageX, pageY, button: 2},
+    });
+  }
+
+  closeMenu () {
+    this.setState({showMenu: false});
+  }
+
   render () {
     const {showMenu, mousePos: {pageX, pageY}} = this.state;
+    const {context, selectedKeys} = this.props;
     if (!showMenu) {
       return null;
     }
@@ -54,11 +65,14 @@ class MouseMenuOverlay extends Component {
       position.vertical = 'top';
     }
     return (
-      <MouseMenu
+      <ContextMenu
         centerPointY={pageY}
         centerPointX={pageX}
-        componentName={"Test"}
         position={position}
+        context={context}
+        selectedKeys={selectedKeys}
+        onCloseMenu={this.closeMenu}
+        onRenewPosition={this.renewPosition}
       />
     );
   }

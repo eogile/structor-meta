@@ -27,7 +27,6 @@ class MouseOverOverlay extends Component {
   componentDidMount () {
     const {context} = this.props;
     if (context) {
-      console.log(context);
       context.addListener('mouseOver.boundaries', this.updatePosition);
       context.addListener('mouseOut.boundaries', this.updatePosition);
     }

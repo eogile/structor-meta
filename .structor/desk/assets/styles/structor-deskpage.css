@@ -226,77 +226,110 @@
 .structor_mouse-button-success {
     background-color: #78CB5B;
 }
-.structor_selected-overlay-menu-box {
+.structor_context-menu-box {
+    position: absolute;
     top: 0;
     left: 0;
     border: 1px solid #35b3ee;
+    border-left: 0;
     background-color: #ffffff;
-    border-radius: 3px;
-    padding: 0.5em 0;
+    border-radius: 4px;
     box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-    /*box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);*/
+    height: 15em;
 }
-
-.structor_selected-overlay-menu-close-button {
-    font-family: 'Open Sans', sans-serif;
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-    font-size: 12px;
-    width: 1em;
-    height: 1em;
-    padding: 0;
-    align-items: center;
-    justify-content: center;
-    display: flex;
+.structor_context-menu-tab {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-left: 1px solid #35b3ee;
+    border-radius: 4px;
+    box-shadow: -2px 0 3px rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
-    border-radius: 50%;
-    border: 1px solid #9a9a9a;
-    color: #9a9a9a;
+}
+.structor_context-menu-tab.parent {
+    width: 3em;
     cursor: pointer;
 }
-.structor_selected-overlay-menu-item-icon {
-    flex-grow: 0;
-    margin: 0 0.5em 0 0;
+.structor_context-menu-tab.child {
+    right: 0;
 }
-.structor_selected-overlay-menu-close-button:hover {
-    color: #043A71;
-    border-color: #043A71;
-}
-.structor_selected-overlay-menu-divider {
-    height: 0;
-    border-top: 1px solid #9a9a9a;
-}
-.structor_selected-overlay-menu-item {
-    font-family: 'Open Sans', sans-serif;
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-    font-size: 12px;
-    align-items: center;
-    display: flex;
-    color: #043A71;
-    white-space: nowrap;
-    padding: 0.2em 1.4em;
-    cursor: pointer;
-}
-.structor_selected-overlay-menu-item:hover {
+.structor_context-menu-tab.parent:hover {
     background-color: #35b3ee;
     color: #ffffff;
 }
-.structor_selected-overlay-menu-paste-box {
+.structor_context-menu-vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+.structor_context-menu-horizontal-container {
+    display: flex;
+    flex-direction: row;
+}
+.structor_context-menu-container-gutter {
+    flex-grow: 2;
+}
+.structor_context-menu-container-item {
+    flex-grow: 1;
+}
+.structor_context-menu-item-icon {
+    flex-grow: 0;
+}
+.structor_context-menu-title {
+    position: relative;
+    padding: 0.2em 0.5em;
+    width: 100%;
+}
+.structor_context-menu-title-wrapper.rotate {
+    position: absolute;
+    top: 6.3em;
+    left: -6.7em;
+    width: 15em;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+.structor_context-menu-divider {
+    height: 0;
+    border-top: 1px solid #9a9a9a;
+}
+.structor_context-menu-item {
+    font-family: 'Open Sans', sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: #043A71;
+    padding: 0.5em;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: pointer;
+    margin: 0.5em;
+}
+.structor_context-menu-item:hover {
+    background-color: #35b3ee;
+    color: #ffffff;
+}
+.structor_context-menu-paste-box {
     padding: 0.5em;
 }
-.structor_selected-overlay-menu-paste-component {
-    border: 2px solid #35b3ee;
+.structor_context-menu-paste-component {
+    border: 1px solid #35b3ee;
     border-radius: 4px;
-    padding: 0.5em 1.5em;
+    padding: 0.5em 0.5em;
     margin: 0.5em 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: #9a9a9a;
 }
-.structor_selected-overlay-menu-add-placeholder {
+.structor_context-menu-add-placeholder {
     border: 1px dotted #9a9a9a;
-    background-color: rgba(240, 173, 78, 0.25);
+    /*background-color: rgba(240, 173, 78, 0.25);*/
     color: #9a9a9a;
     border-radius: 4px;
     font-family: 'Open Sans', sans-serif;
@@ -310,12 +343,15 @@
     min-height: 0.7em;
     cursor: pointer;
 }
-.structor_selected-overlay-menu-replace-placeholder {
+.structor_context-menu-add-placeholder.narrow {
+    width: 70%;
+}
+.structor_context-menu-replace-placeholder {
     border: 1px dotted #9a9a9a;
     background-color: rgba(240, 173, 78, 0.25);
     color: #9a9a9a;
-    border-radius: 50%;
-    width: 2.5em;
+    border-radius: 4px;
+    width: 100%;
     height: 2.5em;
     display: flex;
     align-items: center;
@@ -323,11 +359,31 @@
     margin: 0.2em 0;
     cursor: pointer;
 }
-.structor_selected-overlay-menu-add-placeholder:hover {
+.structor_context-menu-add-placeholder:hover {
     background-color: #35b3ee;
     color: #ffffff;
 }
-.structor_selected-overlay-menu-replace-placeholder:hover {
+.structor_context-menu-replace-placeholder:hover {
     background-color: #35b3ee;
     color: #ffffff;
 }
+.structor_context-menu-close-button {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    right: 1em;
+    width: 1.5em;
+    height: 1.5em;
+    padding: 0;
+    margin: 0;
+    background-color: #ffffff;
+    border-radius: 50%;
+    color: #cccccc;
+    cursor: pointer;
+}
+.structor_context-menu-close-button:hover {
+    color: #35b3ee;
+}
+

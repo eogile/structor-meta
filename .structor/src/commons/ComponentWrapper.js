@@ -31,11 +31,11 @@ class ComponentWrapper extends Component {
 
   componentDidMount () {
     this.initDOMNode();
-    this.subscribeToContext();
+    this.subscribeToContext(this.props);
   }
 
-  componentDidUpdate () {
-    this.subscribeToContext();
+  componentWillUpdate (nextProps, nextState) {
+    this.subscribeToContext(nextProps);
   }
 
   componentWillUnmount () {
@@ -56,8 +56,8 @@ class ComponentWrapper extends Component {
     this.$DOMNode = undefined;
   }
 
-  subscribeToContext () {
-    let { context, elementKey, type } = this.props;
+  subscribeToContext (props) {
+    let { context, elementKey, type } = props;
     if (context) {
       context.addElement(elementKey, {
         type,
@@ -84,7 +84,6 @@ class ComponentWrapper extends Component {
   handleContextMenu (e) {
     e.stopPropagation();
     e.preventDefault();
-    console.log('Context menu for: ', );
   }
 
   handleMouseOver (e) {

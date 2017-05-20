@@ -43,10 +43,10 @@ class PageForDesk extends Component {
   }
 
   handleMouseDown (e) {
-    const {isEditModeOn} = this.state;
-    if (isEditModeOn) {
-      this.pageContext.trigger('mouseDown', e);
-    }
+    // const {isEditModeOn} = this.state;
+    // if (isEditModeOn) {
+    //   this.pageContext.trigger('mouseDown', e);
+    // }
   }
 
   handleContextMenu (e) {
@@ -80,7 +80,6 @@ class PageForDesk extends Component {
   }
 
   updatePageModel (options) {
-    const {} = this.pageContext;
     const {pathname} = options;
     const {get} = this.pageContext;
     const isEditModeOn = get('mode');
@@ -130,7 +129,6 @@ class PageForDesk extends Component {
               key={'selected' + key}
               context={this.pageContext}
               selectedKey={key}
-              isMultipleSelected={selected.length > 1}
             />
           );
         });
@@ -192,7 +190,10 @@ class PageForDesk extends Component {
           : null
         }
         {isEditModeOn &&
-          <MouseMenuOverlay context={this.pageContext} />
+          <MouseMenuOverlay
+            context={this.pageContext}
+            selectedKeys={selectedKeys}
+          />
         }
       </div>
     );

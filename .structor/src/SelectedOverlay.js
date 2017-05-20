@@ -55,17 +55,10 @@ class SelectedOverlay extends Component {
     this.subscribeToInitialState(nextProps);
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    const {selectedKey} = this.props;
-    const {newPos} = this.state;
-    return selectedKey !== nextProps.selectedKey ||
-      (newPos !== nextState.newPos && !isEqual(newPos, nextState.newPos) && !isEqual(nonePos, nextState.newPos));
-  }
-
   subscribeToInitialState (props) {
     const {selectedKey, context} = props;
     if (selectedKey && context) {
-      const element = context.elements[selectedKey];
+      const element = context.getElement(selectedKey);
       if (element) {
         const targetDOMNode = element.getDOMNode();
         this.setSelectedPosition({targetDOMNode});
