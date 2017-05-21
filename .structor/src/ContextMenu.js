@@ -295,7 +295,7 @@ class ContextMenu extends Component {
     }
     return (
       <div
-        className="mouse-center-point"
+        className="structor_mouse-center-point"
         style={{top, left, zIndex: 1045}}
         onContextMenu={this.handleContextMenu}
       >

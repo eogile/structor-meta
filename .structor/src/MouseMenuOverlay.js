@@ -50,7 +50,7 @@ class MouseMenuOverlay extends Component {
   render () {
     const {showMenu, mousePos: {pageX, pageY}} = this.state;
     const {context, selectedKeys} = this.props;
-    if (!showMenu) {
+    if (!showMenu || !selectedKeys) {
       return null;
     }
     const windowWidth = window.innerWidth + window.scrollX;
