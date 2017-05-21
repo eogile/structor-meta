@@ -267,6 +267,7 @@ class ContextMenu extends Component {
                   onClick={this.handleSelect}
                   onMouseOver={this.handleMouseOver}
                   onMouseOut={this.handleMouseOut}
+                  title="Select component"
                 >
                   {item.title}
                 </div>
@@ -279,12 +280,11 @@ class ContextMenu extends Component {
               key="parentTabToggler"
               className="structor_context-menu-tab parent"
               style={{zIndex: 0, left: 0}}
+              onClick={this.toggleParents}
+              title="Show parent components"
             >
-              <div
-                className="structor_context-menu-title-wrapper rotate"
-                onClick={this.toggleParents}
-              >
-                Show More...
+              <div style={{padding: '0.5em 0.3em'}}>
+                <div className="umy-icon-play-back" />
               </div>
             </div>
           );

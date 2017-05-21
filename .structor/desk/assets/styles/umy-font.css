@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'umy-font';
-  src:  url('fonts/umy-font.eot?jcii8p');
-  src:  url('fonts/umy-font.eot?jcii8p#iefix') format('embedded-opentype'),
-    url('fonts/umy-font.ttf?jcii8p') format('truetype'),
-    url('fonts/umy-font.woff?jcii8p') format('woff'),
-    url('fonts/umy-font.svg?jcii8p#umy-font') format('svg');
+  src:  url('fonts/umy-font.eot?281cu');
+  src:  url('fonts/umy-font.eot?281cu#iefix') format('embedded-opentype'),
+    url('fonts/umy-font.ttf?281cu') format('truetype'),
+    url('fonts/umy-font.woff?281cu') format('woff'),
+    url('fonts/umy-font.svg?281cu#umy-font') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -51,7 +51,9 @@
 .umy-icon-cancel-circle:before {
   content: "\ea0d";
 }
+.umy-icon-play-back:before {
+  content: "\ea1c";
+}
 .umy-icon-arrow-up-left:before {
   content: "\ea31";
 }
-
