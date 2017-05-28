@@ -90,8 +90,8 @@ class HighlightedOverlay extends Component {
       let highlightedBox = {
         top: nullPx,
         left: nullPx,
-        width: (newPos.width - 4) + px,
-        height: (newPos.height - 4) + px,
+        width: newPos.width + px,
+        height: newPos.height + px,
       };
       content = (
         <div style={endPoint}>

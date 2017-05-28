@@ -25,9 +25,8 @@
     line-height: 1.4;
 }
 .structor_selected-overlay-highlighted {
-    border: 2px solid #f0ad4e;
+    outline: 2px solid #f0ad4e;
     background-color: rgba(240, 173, 78, 0.25);
-    border-radius: 2px;
 }
 
 .structor_rotate-clockwise {
@@ -227,6 +226,11 @@
     background-color: #78CB5B;
 }
 .structor_context-menu-box {
+    font-family: 'Open Sans', sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    font-size: 13px;
+    line-height: 20px;
     position: absolute;
     top: 0;
     left: 0;
