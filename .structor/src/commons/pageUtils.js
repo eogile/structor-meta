@@ -32,17 +32,19 @@ export function createElement(node, context, isEditModeOn){
 		});
 	}
 
-	let nestedElements = null;
-
-	if(node.children && node.children.length > 0){
-		let children = [];
-		node.children.forEach(node => {
-			children.push(createElement(node, context, isEditModeOn));
-		});
-		nestedElements = children;
-	} else if(modelNode.text) {
-		nestedElements = [modelNode.text];
-	}
+  let nestedElements = null;
+  if(node.children && node.children.length > 0){
+    if (node.children.length === 1) {
+      nestedElements = createElement(node.children[0], context, isEditModeOn)
+    } else {
+      nestedElements = [];
+      node.children.forEach(node => {
+        nestedElements.push(createElement(node, context, isEditModeOn));
+      });
+    }
+  } else if(modelNode.text) {
+    nestedElements = [modelNode.text];
+  }
 
 	let result = null;
 	try{
